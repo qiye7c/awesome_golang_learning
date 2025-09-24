@@ -106,7 +106,7 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 4 | []() |
 
 ### 👥 面试题
-[1. golang 中 make 和 new 的区别？]()
+[1. golang 中 make 和 new 的区别？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#面试题1)
 
 
 
