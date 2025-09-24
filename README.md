@@ -21,7 +21,7 @@
   * [面试题](#-面试题)
 ---
 
-## 📖 简介
+## 🚀 简介
 Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译型编程语言，核心设计目标是解决 “大规模系统开发中的效率、并发、部署复杂度” 问题，兼顾了 C 语言的性能与 Python 的开发便捷性，目前已成为云原生、后端服务、工具开发领域的主流语言之一。
 
 ---
@@ -36,15 +36,15 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 
 ## 📚 学习资料
 ### 🍀 官方资料
-**go官方文档**：[https://go.dev/ref/spec](https://go.dev/ref/spec)
+**Go官方文档**：[https://go.dev/ref/spec](https://go.dev/ref/spec)
 
-**go语言中文网**：[https://go.p2hp.com/](https://go.p2hp.com/)
+**Go语言中文网**：[https://go.p2hp.com/](https://go.p2hp.com/)
 
-**go编程最佳实践**：[https://go.dev/doc/effective_go](https://go.dev/doc/effective_go) 
+**Go编程最佳实践**：[https://go.dev/doc/effective_go](https://go.dev/doc/effective_go) 
 
-**go谷歌开源仓库**：[https://cs.opensource.google/go](https://cs.opensource.google/go)
+**Go谷歌开源仓库**：[https://cs.opensource.google/go](https://cs.opensource.google/go)
 
-**go语言GitHub仓库**：[https://github.com/golang/go](https://github.com/golang/go)
+**Go语言GitHub仓库**：[https://github.com/golang/go](https://github.com/golang/go)
 
 
 ### 📖 精选书籍
@@ -76,14 +76,14 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 1 | [官方教程](https://tour.go-zh.org/welcome/1) |
 | 2 | [菜鸟教程](https://www.runoob.com/go/go-tutorial.html) |
 | 3 | [C语言中文网](https://c.biancheng.net/golang/syntax/) |
-| 4 | [go语言圣经](https://gopl-zh.github.io/ch1/ch1-01.html) |
-| 5 | [golang中文学习文档](https://golang.halfiisland.com/essential/base/1.grammer.html) |
+| 4 | [Go语言圣经](https://gopl-zh.github.io/ch1/ch1-01.html) |
+| 5 | [Golang中文学习文档](https://golang.halfiisland.com/essential/base/1.grammer.html) |
 
 
 ### 📊 技术文章
 | No. | article |
 | :--- | :--- |
-| 1 | [下载和安装go](https://go.p2hp.com/doc/install) |
+| 1 | [下载和安装Go](https://go.p2hp.com/doc/install) |
 | 2 | [创建一个 Go 模块](https://go.p2hp.com/go.dev/doc/tutorial/create-module) |
 | 3 | [多模块工作区入门](https://go.p2hp.com/go.dev/doc/tutorial/workspaces) |
 | 4 | [使用 Go 和 Gin 开发 RESTful API](https://go.p2hp.com/go.dev/doc/tutorial/web-service-gin) |
@@ -98,7 +98,7 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 
 
 ### 📺 学习视频
-| No. | 地址 |
+| No. | address |
 | :--- | :--- |
 | 1 | []() |
 | 2 | []() |
@@ -106,6 +106,8 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 4 | []() |
 
 ### 👥 面试题
+[1. golang 中 make 和 new 的区别？]()
+
 
 
 
