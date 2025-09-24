@@ -13,8 +13,9 @@
 * [简介](#-简介)
 * [仓库目标](#-仓库一览)
 * [学习资料](#-学习资料)
-  * [官方文档](#-官方资料)
-  * [入门教程](#-基础语法)
+  * [官方资料](#-官方资料)
+  * [精选书籍](#-精选书籍)
+  * [入门教程](#-入门教程)
   * [技术文章](#-技术文章)
   * [学习视频](#-学习视频)
   * [面试题](#-面试题)
@@ -35,18 +36,42 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 
 ## 📚 学习资料
 ### 🍀 官方资料
-**go 官方文档**：[https://go.dev/ref/spec](https://go.dev/ref/spec)
+**go官方文档**：[https://go.dev/ref/spec](https://go.dev/ref/spec)
 
-**go 编程最佳实践**：[https://go.dev/doc/effective_go](https://go.dev/doc/effective_go) 
+**go语言中文网**：[https://go.p2hp.com/](https://go.p2hp.com/)
 
-**go 谷歌开源仓库**：[https://cs.opensource.google/go](https://cs.opensource.google/go)
+**go编程最佳实践**：[https://go.dev/doc/effective_go](https://go.dev/doc/effective_go) 
 
-**go GitHub仓库**：[https://github.com/golang/go](https://github.com/golang/go)
+**go谷歌开源仓库**：[https://cs.opensource.google/go](https://cs.opensource.google/go)
+
+**go语言GitHub仓库**：[https://github.com/golang/go](https://github.com/golang/go)
 
 
-### 📝 基础语法
+### 📖 精选书籍
+#### 入门阶段
+| No. | title | author |
+| :--- | :--- | :--- |
+| 1 | Go 语言圣经 | Alan A. A. Donovan、Brian W. Kernighan |
+| 2 | Go 入门指南 | Caleb Doxsey |
 
-| No. | 地址 |
+#### 进阶阶段
+| No. | title | author |
+| :--- | :--- | :--- |
+| 1 | Effective Go | Go 官方团队 |
+| 2 | Go Web 编程 | 谢孟军 |
+| 3 | Go 语言高性能编程 | 极客时间 |
+
+
+#### 深入阶段
+| No. | title | author |
+| :--- | :--- | :--- |
+| 1 | Go 语言设计与实现 | draveness |
+| 2 | Go 高级编程 | 柴树杉、曹春晖 |
+| 3 | Go 语言设计哲学 | 陈皓 |
+
+
+### 📝 入门教程
+| No. | address |
 | :--- | :--- |
 | 1 | [官方教程](https://tour.go-zh.org/welcome/1) |
 | 2 | [菜鸟教程](https://www.runoob.com/go/go-tutorial.html) |
@@ -55,14 +80,22 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 5 | [golang中文学习文档](https://golang.halfiisland.com/essential/base/1.grammer.html) |
 
 
-
-### 📖 技术文章
-| No. | 地址 |
+### 📊 技术文章
+| No. | article |
 | :--- | :--- |
-| 1 | []() |
-| 2 | []() |
-| 3 | []() |
-| 4 | []() |
+| 1 | [下载和安装go](https://go.p2hp.com/doc/install) |
+| 2 | [创建一个 Go 模块](https://go.p2hp.com/go.dev/doc/tutorial/create-module) |
+| 3 | [多模块工作区入门](https://go.p2hp.com/go.dev/doc/tutorial/workspaces) |
+| 4 | [使用 Go 和 Gin 开发 RESTful API](https://go.p2hp.com/go.dev/doc/tutorial/web-service-gin) |
+| 5 | [泛型入门](https://go.p2hp.com/go.dev/doc/tutorial/generics) |
+| 6 | [模糊测试](https://go.p2hp.com/go.dev/doc/tutorial/fuzz) |
+| 7 | [编写 Web 应用程序](https://go.p2hp.com/doc/articles/wiki/) |
+| 8 | [管理依赖项](https://go.p2hp.com/doc/modules/managing-dependencies) |
+| 9 | [访问关系数据库](https://go.p2hp.com/doc/tutorial/database-access) |
+| 10 | [编辑器插件和 IDE](https://go.p2hp.com/go.dev/doc/editors) |
+
+
+
 
 ### 📺 学习视频
 | No. | 地址 |
