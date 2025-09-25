@@ -136,10 +136,20 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 [25. 如何使用 context 包进行 Goroutine 间的上下文管理？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_25)  
 
 
-## 🔧 相关技术
+## 🛠️ 相关技术
 
 ### 🐬 MySQL
+#### 使用Go语言连接MySQL：
+**一、准备工作**    
 
+1.1 安装 MySQL
+首先，确保你的系统中安装了 MySQL 数据库。可以从官网下载安装包进行安装，或者使用包管理器进行安装。  
+
+1.2 安装 Go MySQL 驱动
+在 Go 中，最常用的 MySQL 驱动是 go-sql-driver/mysql。在终端运行以下命令进行安装：
+```bash
+go get -u github.com/go-sql-driver/mysql
+```
 ---
 
 ### 💾 Redis
