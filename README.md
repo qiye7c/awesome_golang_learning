@@ -107,7 +107,30 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 
 ### 👥 面试题
 [1. golang 中 make 和 new 的区别？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_1)  
-[2. 数组和切片（slice）的区别是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_2)
+[2. 数组和切片（slice）的区别是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_2)  
+[3. defer 关键字的作用、执行顺序及对返回值的影响是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_3)  
+[4. 字符串拼接的方式有哪些？哪种效率最高？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_4)  
+[5. rune 类型的作用是什么？与 byte 的区别是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_5)
+[6. 反射（reflection）是什么？如何使用反射获取类型信息和修改变量值？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_6)  
+[7. Go 语言中 struct tag 的作用是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_7)  
+[8. 说说 Go 中的 init 函数，和它的执行顺序](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_8)  
+[9. Map 的底层实现、并发安全性及扩容机制是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_9)  
+[10. 如何判断 Map 中是否包含某个键？如何实现有序 Map？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_10)  
+[11. golang 哪些类型可以作为 map key？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_11)  
+[12. golang 规范中，哪些数据类型不可以比较？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_12)  
+[13. slice 的底层结构是怎样的？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_13)  
+[14. slice 是怎么扩容的？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_14)  
+[15. Goroutine 是什么？与线程的区别是什么？如何创建 Goroutine？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_15)  
+[16. golang 的进程、线程、协程的区别](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_16)  
+[17. Channel 的作用、底层结构及线程安全性如何？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_17)  
+[18. 无缓冲 Channel 和带缓冲 Channel 的区别是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_18)  
+[19. GMP 调度模型的核心组件及调度流程是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_19)  
+[20. 如何控制 Goroutine 的并发数量？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_20)  
+[21. Golang 的垃圾回收（GC）机制及演进过程是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_21)  
+[22. 什么是内存逃逸？哪些情况会导致内存逃逸？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_22)  
+[23. Go 是如何分配内存的？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_23)  
+[24. 什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_24)  
+[25. 如何使用 context 包进行 Goroutine 间的上下文管理？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_25)  
 
 
 
