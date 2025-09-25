@@ -1,2 +1,364 @@
-# Golang面试题
-## 面试题1
+# Golang面试题  
+整理Golang面试中高频出现的基础、进阶、工程化相关问题，包含大厂面试题，方便查阅和复习。
+
+## 目录
+ [一、语言基础](#一语言基础)  
+ [二、数据结构与容器](#二数据结构与容器)  
+ [三、并发编程](#三并发编程)  
+ [四、内存与性能](#四内存与性能)  
+ [五、工程化实践](#五工程化实践)  
+
+## 一、语言基础
+
+### golang中make和new的区别
+1. 作用类型不同：new可给string、int、数组等值类型分配内存；make仅用于slice、map、channel这三种引用类型的初始化。
+2. 返回值类型不同：new返回指向目标类型的指针（如*int）；make返回引用类型本身（如[]int、map[string]int）。
+3. 内存初始化不同：new分配内存后会将内存清零；make不仅分配内存，还会对引用类型进行初始化（如给slice初始化底层数组、给map初始化哈希表结构）。
+4. 内存分配位置：Golang 会通过编译期逃逸分析自动决定内存分配在栈或堆，new和make不直接指定分配位置，但make创建的引用类型因需动态管理（如slice扩容），更易逃逸到堆。
+
+### 数组和切片（slice）的区别是什么？
+1. 长度特性：数组长度在声明时固定（如[5]int），无法动态修改；切片长度可变（如[]int），可通过append()动态扩容。  
+2. 类型本质：数组是值类型，赋值或传参时会复制整个数组，内存开销大；切片是引用类型，底层依赖数组，赋值 / 传参时仅复制切片结构体（含底层数组指针、长度、容量），共享底层数组。  
+3. 初始化方式：
+数组：var arr [3]int、arr := [5]int{1,2,3}；
+切片：var s []int、s := make([]int, 3, 5)（3 为长度，5 为容量）、s := arr[1:3]（从数组截取）。  
+4. 扩容机制：数组无扩容能力；切片容量不足时会自动扩容，规则为：容量＜1024 时翻倍，≥1024 时按 1.25 倍扩容，且需考虑内存对齐。
+
+### defer关键字的作用、执行顺序及对返回值的影响是什么？
+1. 作用：延迟执行函数，常用于资源释放（如关闭文件、解锁互斥锁）、异常捕获（搭配recover()），确保函数退出前执行收尾操作。
+2. 执行顺序：多个defer按 “后进先出（LIFO）” 执行，即最后声明的defer最先执行（类似栈结构）。
+3. 对返回值的影响：
+若函数是无名返回值（如func f() int）：return会先创建临时变量存储返回值，defer修改的是原局部变量，不影响临时变量，最终返回临时变量值。
+若函数是有名返回值（如func f() (i int)）：return不创建临时变量，直接使用有名变量作为返回值，defer可修改有名变量，从而改变最终返回值。
+``` go
+// 有名返回值，defer修改返回值
+func f() (i int) {
+    i = 0
+    defer func() { i++ }() // 执行后i=1
+    return i // 最终返回1
+}
+
+// 无名返回值，defer不影响返回值
+func g() int {
+    i = 0
+    defer func() { i++ }() // 执行后i=1，但不影响返回值
+    return i // 先将i=0存入临时变量，最终返回0
+}
+```
+### 字符串拼接的方式有哪些？哪种效率最高？
+常见拼接方式及效率排序（从高到低）：strings.Join ≈ strings.Builder ＞ bytes.Buffer ＞ + ＞ fmt.Sprintf。  
+
+各方式特点：  
+1. strings.Join：基于strings.Builder实现，提前计算总长度并预分配内存，支持自定义分隔符，适合切片拼接场景（如[]string{"a","b","c"}）。  
+2. strings.Builder：底层是[]byte切片，通过WriteString()直接追加字符串，String()方法将[]byte转为字符串时无额外拷贝，零内存开销，适合高频拼接。  
+3. bytes.Buffer：底层也是[]byte切片，但String()方法会拷贝[]byte内容，效率略低于strings.Builder，适合同时处理字节和字符串的场景。
++运算符：每次拼接都会创建新字符串（因字符串不可变），复制原有字符到新内存，循环中频繁使用会导致大量内存分配和拷贝，效率低。  
+4. fmt.Sprintf：需通过反射解析参数类型，存在额外性能损耗，仅适合简单格式化场景，不适合高频拼接。  
+
+### rune类型的作用是什么？与byte的区别是什么？
+rune作用：rune是int32的别名，用于表示 Unicode 字符（如中文字符、特殊符号），解决 Golang 中字符串按字节存储（byte）无法正确处理多字节字符的问题。  
+
+与byte的区别：  
+1. 类型本质：byte是uint8的别名，占 1 字节，用于表示 ASCII 字符（如英文字母、数字，占 1 字节）；rune是int32的别名，占 4 字节，用于表示 Unicode 字符（如中文字符在 UTF-8 编码下占 3 字节，需用rune完整存储）。  
+2. 应用场景：byte适合处理 ASCII 字符或二进制数据；rune适合处理多字节字符（如遍历中文字符串）。
+
+示例：
+```go
+str := "hello 你好"
+fmt.Println(len(str)) // 输出12（"hello "占6字节，"你好"占6字节）
+fmt.Println(len([]rune(str))) // 输出8（"hello "占5字符，"你好"占3字符）
+```
+<br>
+    
+## 二、数据结构与容器
+
+### Map 的底层实现、并发安全性及扩容机制是什么？
+底层实现：基于哈希表，核心结构为hmap（哈希表元数据）和bmap（桶）：
+- hmap：存储哈希表整体信息，如元素数量（count）、桶数量的对数（B，桶数 = 2^B）、桶数组指针（buckets）、旧桶指针（oldbuckets，扩容时使用）、哈希种子（hash0）。
+- bmap：每个桶存储 8 个键值对，包含tophash（哈希值高 8 位，快速匹配键）、keys（键数组）、values（值数组）、overflow（溢出桶指针，解决哈希冲突）。  
+并发安全性：Golang 内置map非线程安全，多个 Goroutine 并发读写会触发fatal error: concurrent map read and map write。
+解决方案：
+1. 加锁：使用sync.Mutex（互斥锁）或sync.RWMutex（读写锁，读多写少时更高效）包裹map操作。  
+2. 使用sync.Map：Go 标准库为并发场景设计的map，通过 “读写分离”（read只读 map+dirty可写 map）减少锁竞争，适合读多写少、键值稳定的场景（如配置缓存）。
+
+#### 扩容机制触发条件：
+- 装载因子超过阈值：装载因子 = 元素数量 /(桶数 ×8)，阈值为 6.5，超过则需扩容。  
+- 溢出桶过多：当桶数＜2^15 时，溢出桶数≥桶数；当桶数≥2^15 时，溢出桶数≥2^15，需扩容减少哈希冲突。
+
+#### 扩容流程：
+- 新建桶数组（容量为原桶数的 2 倍），将oldbuckets指向原桶数组，buckets指向新桶数组。
+- 渐进式迁移：每次操作map（如读写）时，迁移 1~2 个旧桶的键值对到新桶，避免一次性迁移导致 STW。
+- 迁移完成后，释放oldbuckets内存。
+
+### 如何判断 Map 中是否包含某个键？如何实现有序 Map？
+判断键是否存在：
+通过v, ok := m[key]的ok值判断，ok为true表示键存在，false表示不存在（v为对应值的零值）。
+
+示例：
+```go
+m := map[string]int{"a":1, "b":2}
+v, ok := m["a"]
+if ok {
+    fmt.Printf("键'a'存在，值为：%d\n", v) // 输出：键'a'存在，值为：1
+}
+v2, ok2 := m["c"]
+if !ok2 {
+    fmt.Println("键'c'不存在，值为零值：", v2) // 输出：键'c'不存在，值为零值：0
+}
+```
+实现有序 Map：Golang 内置map无序（遍历顺序随机），需通过 “map+ 切片” 组合实现有序 Map，核心是用切片记录键的插入顺序，用map存储键值对
+示例：
+```go
+type OrderedMap struct {
+    keys []string          // 记录键的插入顺序
+    data map[string]int    // 存储键值对
+    mu   sync.RWMutex      // 保证并发安全（可选）
+}
+
+// 初始化有序Map
+func NewOrderedMap() *OrderedMap {
+    return &OrderedMap{
+        keys: make([]string, 0),
+        data: make(map[string]int),
+    }
+}
+
+// 添加键值对
+func (om *OrderedMap) Set(key string, val int) {
+    om.mu.Lock()
+    defer om.mu.Unlock()
+    if _, ok := om.data[key]; !ok {
+        om.keys = append(om.keys, key) // 新键添加到keys切片
+    }
+    om.data[key] = val
+}
+
+// 获取值
+func (om *OrderedMap) Get(key string) (int, bool) {
+    om.mu.RLock()
+    defer om.mu.RUnlock()
+    val, ok := om.data[key]
+    return val, ok
+}
+
+// 遍历（按插入顺序）
+func (om *OrderedMap) Range(fn func(key string, val int)) {
+    om.mu.RLock()
+    defer om.mu.RUnlock()
+    for _, key := range om.keys {
+        fn(key, om.data[key])
+    }
+}
+```
+### golang 哪些类型可以作为map key？
+在golang规范中，可比较的类型都可以作为map key；
+
+### golang规范中，哪些数据类型不可以比较？
+
+不能作为map key 的类型包括：
+1. slices
+2. maps
+3. functions
+
+### slice的底层结构是怎样的？
+slice 的底层数据是数组，slice 是对数组的封装，它描述一个数组的片段。slice 实际上是一个结构体，包含三个字段：长度、容量、底层数组。
+
+### slice是怎么扩容的？
+**Go 1.17 及之前**  
+
+当 append 导致容量不足时：  
+1.先判断期望容量:
+如果期望容量 > 当前容量的 2 倍，直接用期望容量。  
+2.否则按当前长度（len）判断：  
+如果 len < 1024 → 容量翻倍
+如果 len >= 1024 → 每次增加 25%（newcap = oldcap + oldcap/4）  
+
+💡 注意：  
+这里比较的是 长度（len），不是容量（cap）。  
+扩容后容量还会做内存对齐（保证是 8 的倍数，以及页大小等限制）。
+
+**Go 1.18 及之后**  
+
+规则改成了按容量（cap）判断：  
+1.先判断期望容量:  
+如果期望容量 > 当前容量的 2 倍 → 直接用期望容量  
+2.否则按当前容量判断：  
+如果 oldcap < 256 → 容量翻倍
+如果 oldcap >= 256 → 容量增加约 25%
+公式：
+```go
+newcap = oldcap + (oldcap + 3*256) / 4
+```
+这个公式相当于：
+当 oldcap 很小时，接近翻倍
+当 oldcap 很大时，约等于增加 25%  
+
+💡 注意：  
+1.18 之后比较的是 容量（cap），而不是长度（len）。  
+同样会做内存对齐，最终 newcap 可能比公式算出来的略大。
+<br>
+
+## 三、并发编程
+### Goroutine 是什么？与线程的区别是什么？如何创建 Goroutine？
+Goroutine 是 Golang 的轻量级用户态线程，由 Go 运行时（runtime）调度，而非操作系统内核调度，是实现并发的核心组件。  
+与线程的区别：
+1. 内存开销：Goroutine 初始栈大小仅 2KB~4KB，可动态伸缩（最大可达 GB 级）；线程栈大小固定（通常 MB 级），内存开销大。
+2. 调度机制：Goroutine 由 Go 运行时的 GMP 模型调度（G：Goroutine，M：操作系统线程，P：逻辑处理器），调度切换无需陷入内核态，开销低；线程由操作系统内核调度，切换需陷入内核态，开销高。
+3. 并发能力：单个进程可创建数万甚至数十万 Goroutine；线程因内存和调度开销，数量通常限制在数千。
+创建方式：在函数或方法调用前加go关键字，如：
+```go
+// 无参函数
+go func() {
+    fmt.Println("Goroutine running")
+}()
+
+// 带参函数
+func add(a, b int) {
+    fmt.Println(a + b)
+}
+go add(1, 2)
+```
+### Channel 的作用、底层结构及线程安全性如何？
+作用：Channel 是 Golang 中 Goroutine 间的通信机制，实现 “通过通信共享内存”，支持同步 / 异步通信，还可用于 Goroutine 间同步（如控制并发顺序）。  
+
+底层结构：由hchan结构体实现（源码位于runtime/chan.go），核心字段包括：  
+1. buf：环形缓冲区指针（仅带缓冲 Channel 有），存储待传递数据；
+2. sendx/recvx：缓冲区的发送 / 接收索引，标记下一个数据的存 / 取位置；
+3. sendq/recvq：发送 / 接收 Goroutine 的等待队列，存储因 Channel 满 / 空而阻塞的 Goroutine；
+4. lock：互斥锁，保证 Channel 操作（发送、接收、关闭）的线程安全；
+5. closed：标记 Channel 是否关闭的标志。
+  
+线程安全性：Channel 是线程安全的，所有操作（发送、接收、关闭）均通过lock互斥锁保证原子性，多个 Goroutine 并发操作同一个 Channel 不会出现数据竞争。
+
+### 无缓冲 Channel 和带缓冲 Channel 的区别是什么？
+核心区别：基于缓冲区是否存在，决定通信的同步 / 异步特性。  
+
+1. 无缓冲 Channel（make(chan T)）：
+- 通信特性：同步通信，发送方（ch <- data）会阻塞，直到接收方（<-ch）接收数据；接收方会阻塞，直到发送方发送数据。
+- 场景：适合 Goroutine 间严格同步（如 “生产 - 消费” 需实时交互）。
+
+2. 带缓冲 Channel（make(chan T, cap)，cap 为缓冲区大小）：
+- 通信特性：异步通信，发送方仅在缓冲区满时阻塞，接收方仅在缓冲区空时阻塞；缓冲区未满 / 非空时，发送 / 接收操作可立即完成。
+- 场景：适合 “生产 - 消费” 速度不匹配的场景（如生产者发送速度快于消费者接收速度，缓冲区可暂存数据）。
+
+示例：
+```go
+// 无缓冲Channel：发送方阻塞到接收方接收
+ch1 := make(chan int)
+go func() {
+    ch1 <- 1 // 阻塞，直到主Goroutine接收
+}()
+fmt.Println(<-ch1) // 接收后，子Goroutine的发送操作完成
+
+// 带缓冲Channel：缓冲区未满，发送方不阻塞
+ch2 := make(chan int, 2)
+ch2 <- 1
+ch2 <- 2 // 缓冲区未满，正常发送
+// ch2 <- 3 // 缓冲区满，发送方阻塞
+fmt.Println(<-ch2) // 接收后，缓冲区有空闲位置
+```
+
+### GMP 调度模型的核心组件及调度流程是什么？
+核心组件：
+- G（Goroutine）：轻量级用户线程，包含 Goroutine 执行栈、状态（如Grunnable、Grunning）等，是调度的基本单位。
+- M（Machine）：操作系统线程，是 Goroutine 的执行载体，一个 M 绑定一个 P，执行 P 分配的 G。
+- P（Processor）：逻辑处理器，是 G 和 M 的桥梁，包含 G 的本地队列（LRQ）、M 的绑定信息，负责将 G 分配给 M 执行；P 的数量默认等于 CPU 逻辑核心数（可通过runtime.GOMAXPROCS()修改）。
+- 全局队列（GRQ）：存储未分配到 P 本地队列的 G，当 P 本地队列满（默认 256 个 G）时，G 会放入 GRQ。
+  
+调度流程：
+1. 创建 G：通过go关键字创建 G，优先放入当前 P 的本地队列（LRQ），LRQ 满则放入 GRQ。
+2. 绑定 M 和 P：M 启动后会尝试绑定一个空闲 P，绑定成功后从 P 的 LRQ 中取出 G 执行。
+3. 调度循环：M 执行 G 时，若 G 阻塞（如系统调用、Channel 操作）：
+- 若 G 因系统调用阻塞：M 会与 P 解绑，P 重新绑定其他空闲 M 执行 LRQ 中的 G；当系统调用完成后，G 会放入 GRQ 或其他 P 的 LRQ，等待再次调度。
+- 若 G 因 Channel 操作等用户态阻塞：G 会被放入 Channel 的等待队列，M 继续从 P 的 LRQ 取出下一个 G 执行。
+4. Work Stealing（工作窃取）：当 P 的 LRQ 为空时，P 会从其他 P 的 LRQ 或全局队列 GRQ 中 “窃取” G 执行，避免 M 空闲。
+
+### 如何控制 Goroutine 的并发数量？
+常用两种方式，核心是通过 “资源限制” 或 “任务队列” 控制并发数：
+  
+1. 基于带缓冲 Channel 的并发控制：
+原理：创建容量为并发数的 Channel，每个 Goroutine 执行前向 Channel 发送 “占位信号”，执行完后接收 “释放信号”；Channel 满时，新 Goroutine 会阻塞，直到有 Goroutine 释放信号。
+
+示例：
+```go
+func main() {
+    const maxConc = 5 // 最大并发数
+    tasks := 20       // 总任务数
+    ch := make(chan struct{}, maxConc)
+    var wg sync.WaitGroup
+
+    for i := 0; i < tasks; i++ {
+        wg.Add(1)
+        ch <- struct{}{} // 占位，控制并发数
+        go func(idx int) {
+            defer func() {
+                wg.Done()
+                <-ch // 释放，允许新Goroutine执行
+            }()
+            fmt.Printf("处理任务：%d\n", idx)
+            time.Sleep(100 * time.Millisecond)
+        }(i)
+    }
+    wg.Wait()
+    close(ch)
+}
+```
+2.基于协程池（如第三方库ants）：
+原理：提前创建固定数量的 Goroutine，通过任务队列分配任务，避免频繁创建 / 销毁 Goroutine 的开销，支持动态调整并发数、任务超时等高级特性。  
+
+示例（使用ants库）：
+```go
+import (
+    "fmt"
+    "time"
+    "github.com/panjf2000/ants/v2"
+)
+
+func task(idx int) {
+    fmt.Printf("处理任务：%d\n", idx)
+    time.Sleep(100 * time.Millisecond)
+}
+
+func main() {
+    defer ants.Release()
+    pool, _ := ants.NewPool(5) // 协程池容量5
+    defer pool.Release()
+
+    tasks := 20
+    var wg sync.WaitGroup
+    for i := 0; i < tasks; i++ {
+        wg.Add(1)
+        idx := i
+        _ = pool.Submit(func() {
+            defer wg.Done()
+            task(idx)
+        })
+    }
+    wg.Wait()
+}
+```
+<br>
+
+## 四、内存与性能
+### Golang 的垃圾回收（GC）机制及演进过程是什么？
+GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减轻开发者手动管理内存的负担。  
+
+演进过程：
+1. Go 1.3 及之前：标记 - 清除（Mark-Sweep）
+- 流程：STW（Stop The World，暂停所有用户 Goroutine）→ 标记（从根对象出发，标记所有可达对象）→ 清除（回收未标记对象）→ 恢复用户 Goroutine。
+- 缺点：STW 时间长（毫秒级），影响服务可用性。
+2. Go 1.5：三色标记法（Tri-Color Marking）+ 写屏障（Write Barrier）
+- 流程：  
+① 初始将所有对象标记为白色；  
+② 从根对象出发，将可达对象标记为灰色，放入灰色队列；  
+③ 遍历灰色队列，将其引用的对象标记为灰色，自身标记为黑色；  
+④ 重复步骤③，直到灰色队列为空，白色对象即为待回收对象；  
+⑤ 清除白色对象。  
+- 优化：引入写屏障（插入屏障 + 删除屏障），在 GC 标记阶段，监控对象引用变化，避免黑色对象引用白色对象（打破 “三色不变性”），减少 STW 时间；但栈对象未启用写屏障，需在标记结束前 STW 重新扫描栈。
+
+Go 1.8 及之后：三色标记法 + 混合写屏障（Hybrid Write Barrier）
+- 优化：  
+① GC 开始时，将所有栈对象标记为黑色，无需后续重新扫描栈；  
+② GC 期间，栈上新建对象直接标记为黑色；  
+③ 堆对象引用变化时，触发写屏障：被删除引用的对象标记为灰色，被添加引用的对象标记为灰色；  
+- 效果：彻底消除栈扫描的 STW，STW 时间缩短至微秒级，几乎不影响服务。
