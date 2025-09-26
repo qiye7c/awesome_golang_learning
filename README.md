@@ -16,12 +16,15 @@
   * [官方资料](#-官方资料)
   * [精选书籍](#-精选书籍)
   * [入门教程](#-入门教程)
+  * [进阶技术](#-进阶技术)
   * [技术文章](#-技术文章)
   * [学习视频](#-学习视频)
   * [面试题](#-面试题)
 * [相关技术](#-相关技术)
+  * [网络基础](#-网络基础)
   * [MySQL](#-MySQL)
   * [Redis](#-Redis)
+* [Gin框架](#-Gin框架)
 * [项目实战](#-项目实战)
 ---
 
@@ -50,7 +53,7 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 
 **Go语言GitHub仓库**：[https://github.com/golang/go](https://github.com/golang/go)
 
-
+---
 ### 📖 精选书籍
 #### 入门阶段
 | No. | title | author |
@@ -65,7 +68,6 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 2 | Go Web 编程 | 谢孟军 |
 | 3 | Go 语言高性能编程 | 极客时间 |
 
-
 #### 深入阶段
 | No. | title | author |
 | :--- | :--- | :--- |
@@ -73,7 +75,7 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 2 | Go 高级编程 | 柴树杉、曹春晖 |
 | 3 | Go 语言设计哲学 | 陈皓 |
 
-
+---
 ### 📝 入门教程
 | No. | address |
 | :--- | :--- |
@@ -83,7 +85,41 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 4 | [Go语言圣经](https://gopl-zh.github.io/ch1/ch1-01.html) |
 | 5 | [Golang中文学习文档](https://golang.halfiisland.com/essential/base/1.grammer.html) |
 
+#### 语法基础
+| No. | address |
+| :--- | :--- |
+| 1 | [基本语法](https://golang.halfiisland.com/essential/base/1.grammer.html) |
+| 2 | [数据类型](https://golang.halfiisland.com/essential/base/10.datatype.html) |
+| 3 | [常量](https://golang.halfiisland.com/essential/base/30.constant.html) |
+| 4 | [变量](https://golang.halfiisland.com/essential/base/40.variable.html) |
+| 5 | [输入输出](https://golang.halfiisland.com/essential/base/45.inout.html) |
+| 6 | [条件控制](https://golang.halfiisland.com/essential/base/52.condition.html) |
+| 7 | [循环控制](https://golang.halfiisland.com/essential/base/55.loop.html) |
+| 8 | [切片](https://golang.halfiisland.com/essential/base/60.slice.html) |
+| 9 | [字符串](https://golang.halfiisland.com/essential/base/62.string.html) |
+| 10 | [映射表](https://golang.halfiisland.com/essential/base/65.map.html) |
+| 11 | [指针](https://golang.halfiisland.com/essential/base/67.pointer.html) |
+| 12 | [函数](https://golang.halfiisland.com/essential/base/69.func.html) |
+| 13 | [结构体](https://golang.halfiisland.com/essential/base/75.struct.html) |
+| 14 | [方法](https://golang.halfiisland.com/essential/base/80.method.html) |
 
+
+---
+### ⚙️ 进阶技术
+| No. | address |
+| :--- | :--- |
+| 1 | [接口](https://golang.halfiisland.com/essential/senior/85.interface.html) |
+| 2 | [泛型](https://golang.halfiisland.com/essential/senior/90.generic.html) |
+| 3 | [迭代器](https://golang.halfiisland.com/essential/senior/91.iterator.html) |
+| 4 | [类型](https://golang.halfiisland.com/essential/senior/92.types.html) |
+| 5 | [错误](https://golang.halfiisland.com/essential/senior/95.error.html) |
+| 6 | [文件](https://golang.halfiisland.com/essential/senior/100.io.html) |
+| 7 | [反射](https://golang.halfiisland.com/essential/senior/105.reflect.html) |
+| 8 | [并发](https://golang.halfiisland.com/essential/senior/110.concurrency.html) |
+| 9 | [模块](https://golang.halfiisland.com/essential/senior/115.module.html) |
+| 10 | [测试](https://golang.halfiisland.com/essential/senior/120.test.html) |
+
+---
 ### 📊 技术文章
 | No. | article |
 | :--- | :--- |
@@ -97,6 +133,21 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 8 | [管理依赖项](https://go.p2hp.com/doc/modules/managing-dependencies) |
 | 9 | [访问关系数据库](https://go.p2hp.com/doc/tutorial/database-access) |
 | 10 | [编辑器插件和 IDE](https://go.p2hp.com/go.dev/doc/editors) |
+| 11 | [Go语言中使用sqlx来操作事务](https://cloud.tencent.com/developer/article/2444802?policyId=1004) |
+| 12 | [Golang学习笔记之Golang与Mysql交互](https://cloud.tencent.com/developer/article/1379871?policyId=1004) |
+| 13 | [手把手带你从0搭建一个Golang ORM框架（全）！](https://cloud.tencent.com/developer/article/1927194?policyId=1004) |
+| 14 | [golang源码分析（2）：Golang context 包](https://cloud.tencent.com/developer/article/2064586) |
+| 15 | [Golang可能会踩的58个坑](https://blog.csdn.net/qq_35461287/article/details/124861875?ops_request_misc=&request_id=&biz_id=102&utm_term=Golang&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-124861875.142^v102^control&spm=1018.2226.3001.4187) |
+| 16 | [golang硬核技术（一）内存管理](https://blog.csdn.net/qq_25490573/article/details/130027162?ops_request_misc=&request_id=&biz_id=102&utm_term=golang&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-6-130027162.142^v102^control&spm=1018.2226.3001.4187) |
+| 17 | [golang 定时任务处理](https://blog.csdn.net/molaifeng/article/details/123886894?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522b28a2f290521b49e6d14dddd80987be8%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=b28a2f290521b49e6d14dddd80987be8&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-13-123886894-null-null.142^v102^control&utm_term=golang&spm=1018.2226.3001.4187) |
+| 18 | [golang高级进阶（一）：进程、线程、并发、并行、goroutine协程](https://blog.csdn.net/genziisme/article/details/124324755?spm=1001.2101.3001.6650.3&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-3-124324755-blog-145618546.235%5Ev43%5Epc_blog_bottom_relevance_base5&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-3-124324755-blog-145618546.235%5Ev43%5Epc_blog_bottom_relevance_base5&utm_relevant_index=6) |
+| 19 | [白话 Golang 协程池](https://cloud.tencent.com/developer/article/1825581) |
+| 20 | [全文图解Golang 调度器 GMP 原理与调度](https://zhuanlan.zhihu.com/p/288017699) |
+| 21 | [深入理解Go语言中的Channel与Select](https://blog.csdn.net/weixin_53623989/article/details/136209823) |
+| 22 | [同步原语与锁](https://draven.co/golang/docs/part3-runtime/ch06-concurrency/golang-sync-primitives/) |
+
+
+
 
 
 
@@ -109,6 +160,7 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 3 | []() |
 | 4 | []() |
 
+---
 ### 👥 面试题
 [1. golang 中 make 和 new 的区别？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_1)  
 [2. 数组和切片（slice）的区别是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_2)  
@@ -421,6 +473,7 @@ if err := tx.Create(&User{Name: "Charlie", Age: 30}).Error; err != nil {
 
 tx.Commit()
 ```
+---
 ### 八、关联关系
 GORM 支持常见的关联关系：
 - Has One（一对一）
@@ -454,6 +507,7 @@ db.Create(&User{
 var user User
 db.Preload("Posts").First(&user, 1)
 ```
+---
 ### 九、钩子函数（Hooks）  
 Hooks 是在创建、更新、删除等操作前后自动调用的函数，方便你在数据变更时做额外逻辑（如数据校验、密码加密）。
 ```go
@@ -467,6 +521,7 @@ func (u *User) AfterCreate(tx *gorm.DB) error {
   return nil
 }
 ```
+---
 ### 十、常见问题与最佳实践
 10.1 字段标签（Tags）  
 ```go
@@ -486,8 +541,77 @@ type User struct {
   
 10.4 性能优化  
 - 批量插入：db.CreateInBatches(users, 100)
-- 避免 N+1 查询：Preload("关联字段")
+- 避免 N+1 查询：对于复杂关联查询，预加载（Preload）可以减少 N+1 查询问题，但在数据量较大时要注意性能
   
+10.5 批量操作  
+- 尽可能使用批量插入和更新，减少数据库连接次数；
+
+### 十一、实战案例
+下面是一个简单的示例，展示如何使用 GORM 完成一个用户的 CRUD 操作，并处理一对多关联关系：
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "time"
+
+    "gorm.io/driver/mysql"
+    "gorm.io/gorm"
+)
+
+type User struct {
+    ID        uint      `gorm:"primaryKey"`
+    Name      string    `gorm:"size:100;not null"`
+    Age       int       `gorm:"not null"`
+    Email     string    `gorm:"unique;not null"`
+    Orders    []Order   // 一对多关联关系
+    CreatedAt time.Time
+}
+
+type Order struct {
+    ID     uint   `gorm:"primaryKey"`
+    Item   string `gorm:"not null"`
+    UserID uint
+}
+
+func main() {
+    dsn := "username:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
+    db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    if err != nil {
+        log.Fatal("连接数据库失败：", err)
+    }
+
+    // 自动迁移，确保数据库表结构和模型同步
+    db.AutoMigrate(&User{}, &Order{})
+
+    // 创建用户及关联订单
+    user := User{
+        Name:  "Alice",
+        Age:   28,
+        Email: "alice@example.com",
+        Orders: []Order{
+            {Item: "Laptop"},
+            {Item: "Smartphone"},
+        },
+    }
+    db.Create(&user)
+
+    // 查询用户及其订单
+    var u User
+    db.Preload("Orders").First(&u, user.ID)
+    fmt.Printf("用户：%v\n订单：%v\n", u, u.Orders)
+
+    // 更新用户数据
+    db.Model(&u).Update("Age", 29)
+
+    // 删除用户记录（级联删除订单需要手动处理或设置外键约束）
+    db.Delete(&u)
+}
+```
+在上述示例中，我们通过自动迁移确保数据库表结构与模型保持一致，并实现了用户和订单的创建、查询、更新和删除操作。通过 Preload 方法，我们还演示了如何加载关联数据。
+
+---
 
 # 💾 Redis
 
