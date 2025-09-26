@@ -22,6 +22,7 @@
 * [相关技术](#-相关技术)
   * [MySQL](#-MySQL)
   * [Redis](#-Redis)
+* [项目实战](#-项目实战)
 ---
 
 ## 🚀 简介
@@ -135,12 +136,12 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 [24. 什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_24)  
 [25. 如何使用 context 包进行 Goroutine 间的上下文管理？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_25)  
 
-
+---
 ## 🛠️ 相关技术
 
 ### 🐬 MySQL
 #### 使用Go语言连接MySQL：
-**一、准备工作**    
+**一、安装MySQL驱动**    
 
 1.1 安装 MySQL  
 首先，确保你的系统中安装了 MySQL 数据库。可以从官网下载安装包进行安装，或者使用包管理器进行安装。  
@@ -150,9 +151,178 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 ```bash
 go get -u github.com/go-sql-driver/mysql
 ```
+1.3 配置数据库连接信息  
+在开始编码之前，需要在 MySQL 中创建一个新的数据库和用户，并授予相应的权限。同时，记录下数据库的主机名、端口号、用户名和密码，这些信息将在后续的代码中用于建立连接。
+
 ---
 
+**二、连接MySQL**  
+
+在 Go 中，使用 database/sql 包来管理数据库连接。以下是一个简单的示例，展示如何建立连接：
+
+```go
+import (
+    "database/sql"
+    _ "github.com/go-sql-driver/mysql"
+)
+
+dsn := "user:password@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=true&loc=Local"
+db, err := sql.Open("mysql", dsn)
+if err != nil {
+    panic(err)
+}
+defer db.Close()
+
+// 验证连接
+err = db.Ping()
+if err != nil {
+    panic(err)
+}
+```
+---
+**三、增删改查**
+
+一旦连接建立，就可以执行 SQL了： 
+
+3.1 创建表：  
+```go
+_, err := db.Exec(`
+CREATE TABLE IF NOT EXISTS users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    age INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+`)
+```
+3.2 插入数据：
+```go
+res, err := db.Exec("INSERT INTO users(name, age) VALUES (?, ?)", "Alice", 20)
+lastID, _ := res.LastInsertId()  // 获取插入ID
+```
+3.3 查询数据：
+```go
+rows, err := db.Query("SELECT id, name, age FROM users WHERE age > ?", 18)
+defer rows.Close()
+
+for rows.Next() {
+    var id int64
+    var name string
+    var age int
+    rows.Scan(&id, &name, &age)
+    fmt.Printf("ID: %d, Name: %s, Age: %d\n", id, name, age)
+}
+```
+3.4 删除数据：
+```go
+res, err := db.Exec("DELETE FROM users WHERE name=?", "Alice")
+rowsAffected, _ := res.RowsAffected()
+```
+---
+**四、事务处理**
+
+在处理涉及多个数据库操作的业务逻辑时，事务是保证数据一致性的关键。以下是一个简单的事务处理示例：  
+
+```go
+tx, err := db.Begin()
+if err != nil {
+    panic(err)
+}
+
+_, err = tx.Exec("INSERT INTO users(name, age) VALUES (?, ?)", "Bob", 25)
+if err != nil {
+    tx.Rollback()
+    panic(err)
+}
+
+err = tx.Commit()
+if err != nil {
+    panic(err)
+}
+```
+---
+**五、连接池的使用**
+
+5.1 连接池的重要性：  
+在高并发的场景下，建立和关闭数据库连接的开销是非常大的。使用连接池可以复用数据库连接，提高性能。  
+
+5.2 连接池配置：
+```go
+db.SetMaxOpenConns(100)           // 最大打开连接数
+db.SetMaxIdleConns(20)            // 最大空闲连接数
+db.SetConnMaxLifetime(time.Hour)  // 连接最大存活时间
+db.SetConnMaxIdleTime(30*time.Minute) // 连接最大空闲时间
+```
+---
+
+#### GORM的使用   
+作为 Go 语言中最受欢迎的对象关系映射（ORM）库，GORM 提供了一套简洁且功能强大的 API，极大地简化了数据库操作。  
+
+**一、GORM 简介**  
+GORM 是用 Go 语言编写的 ORM 库，它基于 httprouter 和 Go 标准库构建。其主要特点包括：  
+- 简洁易用：通过定义结构体来映射数据库表，简化数据操作；
+- 功能全面：支持 CRUD、事务、预加载、关联关系、自动迁移等常见功能；
+- 扩展性强：内置钩子函数、插件机制以及对多种数据库（MySQL、PostgreSQL、SQLite、SQL Server 等）的支持；
+- 性能优秀：经过大量优化，能够在高并发场景下保持稳定性能。
+
+参考:[GORM官方文档](https://gorm.io/zh_CN/docs/index.html)  
+
+**二、环境搭建与安装**  
+在使用 GORM 之前，首先需要安装 Go 环境，然后通过 go get 命令安装 GORM 及所需数据库驱动。例如，如果你使用 MySQL 数据库，在终端运行以下命令安装：
+```bash
+# 安装 GORM 框架
+go get -u gorm.io/gorm
+
+# 安装 MySQL 驱动
+go get -u gorm.io/driver/mysql
+```
+
+安装完成后，在项目代码中导入相关包：
+```go
+import (
+    "gorm.io/gorm"
+    "gorm.io/driver/mysql"
+)
+```
+示例：
+```go
+package main
+
+import (
+    "gorm.io/driver/mysql"
+    "gorm.io/gorm"
+)
+
+type User struct {
+    gorm.Model
+    Name string
+    Age  int
+}
+
+func main() {
+    dsn := "root:123456@tcp(127.0.0.1:3306)/testdb?charset=utf8mb4&parseTime=True&loc=Local"
+    db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    if err != nil {
+        panic("failed to connect database")
+    }
+
+    // 迁移表
+    db.AutoMigrate(&User{})
+
+    // 创建
+    db.Create(&User{Name: "David", Age: 35})
+
+    // 查询
+    var user User
+    db.First(&user, 1) // 根据主键查询
+    fmt.Printf("User: %+v\n", user)
+}
+```
+
 ### 💾 Redis
+
+---
+##  💻 项目实战
 
 
 
