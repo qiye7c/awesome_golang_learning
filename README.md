@@ -118,6 +118,8 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 8 | [并发](https://golang.halfiisland.com/essential/senior/110.concurrency.html) |
 | 9 | [模块](https://golang.halfiisland.com/essential/senior/115.module.html) |
 | 10 | [测试](https://golang.halfiisland.com/essential/senior/120.test.html) |
+| 11 | [标准库](https://golang.halfiisland.com/essential/std/0.intro.html) |
+
 
 ---
 ### 📊 技术文章
@@ -145,8 +147,8 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 20 | [全文图解Golang 调度器 GMP 原理与调度](https://zhuanlan.zhihu.com/p/288017699) |
 | 21 | [深入理解Go语言中的Channel与Select](https://blog.csdn.net/weixin_53623989/article/details/136209823) |
 | 22 | [同步原语与锁](https://draven.co/golang/docs/part3-runtime/ch06-concurrency/golang-sync-primitives/) |
-
-
+| 23 |[使用Golang实现高效二分查找算法详解与实战案例](https://www.oryoy.com/news/shi-yong-golang-shi-xian-gao-xiao-er-fen-cha-zhao-suan-fa-xiang-jie-yu-shi-zhan-an-li.html)|
+| 24 |[掌握Golang项目从零到部署：全面解析持续集成与持续部署实践](https://www.oryoy.com/news/zhang-wo-golang-xiang-mu-cong-ling-dao-bu-shu-quan-mian-jie-xi-chi-xu-ji-cheng-yu-chi-xu-bu-shu-shi.html)|
 
 
 
@@ -187,6 +189,8 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 [23. Go 是如何分配内存的？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_23)  
 [24. 什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_24)  
 [25. 如何使用 context 包进行 Goroutine 间的上下文管理？](https://github.com/qiye7c/awesome_golang_learning/blob/main/interview_question/README.md#subject_25)  
+
+
 
 ---
 ## 🛠️ 相关技术
