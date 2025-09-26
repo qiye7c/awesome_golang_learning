@@ -267,6 +267,7 @@ GORM 是用 Go 语言编写的 ORM 库，它基于 httprouter 和 Go 标准库�
 
 参考:[GORM官方文档](https://gorm.io/zh_CN/docs/index.html)  
 
+---
 **二、环境搭建与安装**  
 在使用 GORM 之前，首先需要安装 Go 环境，然后通过 go get 命令安装 GORM 及所需数据库驱动。例如，如果你使用 MySQL 数据库，在终端运行以下命令安装：
 ```bash
@@ -276,6 +277,8 @@ go get -u gorm.io/gorm
 # 安装 MySQL 驱动
 go get -u gorm.io/driver/mysql
 ```
+##### ⚠️ gorm.io/driver/mysql 是 GORM v2 推荐的 MySQL 驱动，支持 database/sql 接口。  
+
 
 安装完成后，在项目代码中导入相关包：
 ```go
@@ -284,40 +287,55 @@ import (
     "gorm.io/driver/mysql"
 )
 ```
-示例：
+---
+**三、连接数据库**  
+
+GORM 通过 gorm.Open() 来创建数据库连接。我们需要提供 DSN（Data Source Name） 告诉 GORM 如何连接 MySQL。
 ```go
 package main
 
 import (
-    "gorm.io/driver/mysql"
-    "gorm.io/gorm"
+  "gorm.io/driver/mysql"
+  "gorm.io/gorm"
 )
 
-type User struct {
-    gorm.Model
-    Name string
-    Age  int
-}
-
 func main() {
-    dsn := "root:123456@tcp(127.0.0.1:3306)/testdb?charset=utf8mb4&parseTime=True&loc=Local"
-    db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-    if err != nil {
-        panic("failed to connect database")
-    }
+  // DSN 格式：user:password@tcp(IP:端口)/数据库名?参数
+  dsn := "root:123456@tcp(127.0.0.1:3306)/testdb?charset=utf8mb4&parseTime=True&loc=Local"
+  
+  // 打开数据库连接
+  db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+  if err != nil {
+    panic("failed to connect database")
+  }
 
-    // 迁移表
-    db.AutoMigrate(&User{})
-
-    // 创建
-    db.Create(&User{Name: "David", Age: 35})
-
-    // 查询
-    var user User
-    db.First(&user, 1) // 根据主键查询
-    fmt.Printf("User: %+v\n", user)
+  // 配置连接池
+  sqlDB, _ := db.DB()
+  sqlDB.SetMaxOpenConns(100) // 最大打开连接数
+  sqlDB.SetMaxIdleConns(20)  // 最大空闲连接数
+  sqlDB.SetConnMaxLifetime(time.Hour) // 连接最大存活时间
 }
 ```
+---
+
+**四、模型定义（Model）**  
+在 GORM 中，模型就是一个 Go 结构体，每个字段对应数据库表的一列。
+```go
+type User struct {
+  gorm.Model           // 内置字段：ID, CreatedAt, UpdatedAt, DeletedAt
+  Name       string
+  Age        int
+  Email      string `gorm:"unique"` // Email 唯一
+  Password   string
+}
+```
+gorm.Model 是 GORM 提供的基础模型结构体，帮你自动添加：
+- ID：主键
+- CreatedAt：创建时间
+- UpdatedAt：更新时间
+- DeletedAt：删除时间（用于软删除）
+
+
 
 ### 💾 Redis
 
