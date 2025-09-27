@@ -17,6 +17,7 @@
 2. 返回值类型不同：new返回指向目标类型的指针（如*int）；make返回引用类型本身（如[]int、map[string]int）。  
 3. 内存初始化不同：new分配内存后会将内存清零；make不仅分配内存，还会对引用类型进行初始化（如给slice初始化底层数组、给map初始化哈希表结构）。  
 4. 内存分配位置：Golang 会通过编译期逃逸分析自动决定内存分配在栈或堆，new和make不直接指定分配位置，但make创建的引用类型因需动态管理（如slice扩容），更易逃逸到堆。  
+---
 
 <h3 id="subject_2">数组和切片（slice）的区别是什么？</h3>
 
@@ -26,6 +27,7 @@
 数组：var arr [3]int、arr := [5]int{1,2,3}；
 切片：var s []int、s := make([]int, 3, 5)（3 为长度，5 为容量）、s := arr[1:3]（从数组截取）。  
 4. 扩容机制：数组无扩容能力；切片容量不足时会自动扩容，规则为：容量＜1024 时翻倍，≥1024 时按 1.25 倍扩容，且需考虑内存对齐。
+---
 
 <h3 id="subject_3">defer 关键字的作用、执行顺序及对返回值的影响是什么？</h3>
 
@@ -50,6 +52,8 @@ func g() int {
     return i // 先将i=0存入临时变量，最终返回0
 }
 ```
+---
+
 <h3 id="subject_4">字符串拼接的方式有哪些？哪种效率最高？</h3>
 
 常见拼接方式及效率排序（从高到低）：strings.Join ≈ strings.Builder ＞ bytes.Buffer ＞ + ＞ fmt.Sprintf。  
@@ -60,6 +64,7 @@ func g() int {
 3. bytes.Buffer：底层也是[]byte切片，但String()方法会拷贝[]byte内容，效率略低于strings.Builder，适合同时处理字节和字符串的场景。
 +运算符：每次拼接都会创建新字符串（因字符串不可变），复制原有字符到新内存，循环中频繁使用会导致大量内存分配和拷贝，效率低。  
 4. fmt.Sprintf：需通过反射解析参数类型，存在额外性能损耗，仅适合简单格式化场景，不适合高频拼接。  
+---
 
 <h3 id="subject_5">rune 类型的作用是什么？与 byte 的区别是什么？</h3>
 
@@ -75,12 +80,14 @@ str := "hello 你好"
 fmt.Println(len(str)) // 输出12（"hello "占6字节，"你好"占6字节）
 fmt.Println(len([]rune(str))) // 输出8（"hello "占5字符，"你好"占3字符）
 ```
+---
 <h3 id="subject_6">反射（reflection）是什么？如何使用反射获取类型信息和修改变量值？</h3>
 反射是 Golang 提供的运行时类型检查与操作机制，通过reflect包可动态获取变量的类型信息（如类型名、方法、字段），修改变量值，调用方法，无需在编译期确定变量类型。 
 
 1. 从接口值到反射对象：通过reflect.TypeOf()获取变量的类型信息（reflect.Type），通过reflect.ValueOf()获取变量的值信息（reflect.Value）。
 2. 从反射对象到接口值：通过reflect.Value.Interface()将反射对象转换回接口值。
 3. 仅可修改 “可设置”（settable）的反射对象：若反射对象代表的是变量本身（而非副本），则可修改其值；判断标准是reflect.Value.CanSet()返回true。
+---
 
 <h3 id="subject_7">Go 语言中 struct tag 的作用是什么？</h3>
 
@@ -94,6 +101,7 @@ fmt.Println(len([]rune(str))) // 输出8（"hello "占5字符，"你好"占3字�
 3. 框架配置
     - Web 框架中绑定请求参数
     - 生成 Swagger API 文档
+ ---
  
 <h3 id="subject_8">说说 Go 中的 init 函数，和它的执行顺序</h3>  
 
@@ -110,12 +118,42 @@ init 函数是 Go 语言中一个特殊的预声明函数，用于包的初始�
 - 不支持递归调用
 - 不能被其他函数调用
 - 不能作为方法或匿名函数
+---
+
+<h3 id="subject_9">Go 语言中函数是值传递还是引用传递？</h3> 
+
+Go 语言中 所有参数传递都是值传递。  
+- 对于引用类型（slice、map、chan、指针、interface），传递的是一个指向底层数据结构的指针的拷贝，因此在函数内可以修改原数据。
+- 对于值类型（int、string、struct 等），传递的是值的副本，函数内修改不会影响原值。
+---
+
+<h3 id="subject_10">nil interface {} 与 nil 的区别</h3> 
+
+interface{} 底层有两个字段：
+- 类型信息 (type)
+- 值信息 (value)
+当一个 interface{} 变量的 type 和 value 都为 nil 时，它才真正等于 nil。  
+
+如果一个接口变量的类型信息非 nil，而值信息是 nil（例如 var err error = (*int)(nil)），那么它和 nil 比较时为 false。
+
+---
+
+<h3 id="subject_11">类型断言和类型转换的区别</h3> 
+
+- 类型转换：编译期进行，转换的是已知类型，比如 int(x)。
+- 类型断言：运行期进行，用于判断接口变量实际存储的类型，比如 v, ok := x.(T)。
+- 类型断言失败会 panic（不带 ok 时），带 ok 时返回 false。
+---
+
+
+
+
 
 <br>
 
 ## 二、数据结构与容器
 
-<h3 id="subject_9">Map 的底层实现、并发安全性及扩容机制是什么？</h3>
+<h3 id="subject_12">Map 的底层实现、并发安全性及扩容机制是什么？</h3>
 
 底层实现：基于哈希表，核心结构为hmap（哈希表元数据）和bmap（桶）：
 - hmap：存储哈希表整体信息，如元素数量（count）、桶数量的对数（B，桶数 = 2^B）、桶数组指针（buckets）、旧桶指针（oldbuckets，扩容时使用）、哈希种子（hash0）。
@@ -133,8 +171,9 @@ init 函数是 Go 语言中一个特殊的预声明函数，用于包的初始�
 - 新建桶数组（容量为原桶数的 2 倍），将oldbuckets指向原桶数组，buckets指向新桶数组。
 - 渐进式迁移：每次操作map（如读写）时，迁移 1~2 个旧桶的键值对到新桶，避免一次性迁移导致 STW。
 - 迁移完成后，释放oldbuckets内存。
+---
 
-<h3 id="subject_10">如何判断 Map 中是否包含某个键？如何实现有序 Map？</h3>
+<h3 id="subject_13">如何判断 Map 中是否包含某个键？如何实现有序 Map？</h3>
 
 判断键是否存在：
 通过v, ok := m[key]的ok值判断，ok为true表示键存在，false表示不存在（v为对应值的零值）。
@@ -196,22 +235,27 @@ func (om *OrderedMap) Range(fn func(key string, val int)) {
     }
 }
 ```
-<h3 id="subject_11">golang 哪些类型可以作为 map key？</h3>
+---
+<h3 id="subject_14">golang 哪些类型可以作为 map key？</h3>
 
 在golang规范中，可比较的类型都可以作为map key；
 
-<h3 id="subject_12">golang 规范中，哪些数据类型不可以比较？</h3>
+---
+
+<h3 id="subject_15">golang 规范中，哪些数据类型不可以比较？</h3>
 
 不能作为map key 的类型包括：
 1. slices
 2. maps
 3. functions
+---
 
-<h3 id="subject_13">slice 的底层结构是怎样的？</h3>
+<h3 id="subject_16">slice 的底层结构是怎样的？</h3>
 
 slice 的底层数据是数组，slice 是对数组的封装，它描述一个数组的片段。slice 实际上是一个结构体，包含三个字段：长度、容量、底层数组。
 
-<h3 id="subject_14">slice 是怎么扩容的？</h3>
+---
+<h3 id="subject_17">slice 是怎么扩容的？</h3>
 
 **Go 1.17 及之前**  
 
@@ -245,10 +289,12 @@ newcap = oldcap + (oldcap + 3*256) / 4
 💡 注意：  
 1.18 之后比较的是 容量（cap），而不是长度（len）。  
 同样会做内存对齐，最终 newcap 可能比公式算出来的略大。
+
+---
 <br>
 
 ## 三、并发编程
-<h3 id="subject_15">Goroutine 是什么？与线程的区别是什么？如何创建 Goroutine？</h3>
+<h3 id="subject_18">Goroutine 是什么？与线程的区别是什么？如何创建 Goroutine？</h3>
 
 Goroutine 是 Golang 的轻量级用户态线程，由 Go 运行时（runtime）调度，而非操作系统内核调度，是实现并发的核心组件。  
 与线程的区别：
@@ -269,7 +315,9 @@ func add(a, b int) {
 }
 go add(1, 2)
 ```
-<h3 id="subject_16">golang 的进程、线程、协程的区别</h3>
+---
+
+<h3 id="subject_19">golang 的进程、线程、协程的区别</h3>
 
 - 进程：OS 资源分配的基本单位，独立内存空间，资源占用最大，切换成本最高，进程间隔离。
 - 线程：进程内的执行单元，共享进程资源，资源占用中等，由 OS 调度，切换成本较高。
@@ -287,8 +335,10 @@ go add(1, 2)
 | 资源共享方式 | 进程间隔离，需通过 IPC 通信    | 共享进程资源，需加锁同步       | 共享进程资源，推荐用 channel 通信 |
 | 生命周期管理 | 由 OS 管理                     | 由 OS 或用户管理               | 由 Go 运行时自动管理           |
 
+---
 
-<h3 id="subject_17">Channel 的作用、底层结构及线程安全性如何？</h3>
+<h3 id="subject_20">Channel 的作用、底层结构及线程安全性如何？</h3>
+
 作用：Channel 是 Golang 中 Goroutine 间的通信机制，实现 “通过通信共享内存”，支持同步 / 异步通信，还可用于 Goroutine 间同步（如控制并发顺序）。  
 
 底层结构：由hchan结构体实现（源码位于runtime/chan.go），核心字段包括：  
@@ -300,7 +350,9 @@ go add(1, 2)
   
 线程安全性：Channel 是线程安全的，所有操作（发送、接收、关闭）均通过lock互斥锁保证原子性，多个 Goroutine 并发操作同一个 Channel 不会出现数据竞争。
 
-<h3 id="subject_18">无缓冲 Channel 和带缓冲 Channel 的区别是什么？</h3>
+---
+<h3 id="subject_21">无缓冲 Channel 和带缓冲 Channel 的区别是什么？</h3>
+
 核心区别：基于缓冲区是否存在，决定通信的同步 / 异步特性。  
 
 1. 无缓冲 Channel（make(chan T)）：
@@ -327,8 +379,8 @@ ch2 <- 2 // 缓冲区未满，正常发送
 // ch2 <- 3 // 缓冲区满，发送方阻塞
 fmt.Println(<-ch2) // 接收后，缓冲区有空闲位置
 ```
-
-<h3 id="subject_19">GMP 调度模型的核心组件及调度流程是什么？</h3>
+---
+<h3 id="subject_22">GMP 调度模型的核心组件及调度流程是什么？</h3>
 
 核心组件：
 - G（Goroutine）：轻量级用户线程，包含 Goroutine 执行栈、状态（如Grunnable、Grunning）等，是调度的基本单位。
@@ -343,8 +395,9 @@ fmt.Println(<-ch2) // 接收后，缓冲区有空闲位置
 - 若 G 因系统调用阻塞：M 会与 P 解绑，P 重新绑定其他空闲 M 执行 LRQ 中的 G；当系统调用完成后，G 会放入 GRQ 或其他 P 的 LRQ，等待再次调度。
 - 若 G 因 Channel 操作等用户态阻塞：G 会被放入 Channel 的等待队列，M 继续从 P 的 LRQ 取出下一个 G 执行。
 4. Work Stealing（工作窃取）：当 P 的 LRQ 为空时，P 会从其他 P 的 LRQ 或全局队列 GRQ 中 “窃取” G 执行，避免 M 空闲。
+---
 
-<h3 id="subject_20">如何控制 Goroutine 的并发数量？</h3>
+<h3 id="subject_23">如何控制 Goroutine 的并发数量？</h3>
 
 常用两种方式，核心是通过 “资源限制” 或 “任务队列” 控制并发数：
   
@@ -409,10 +462,41 @@ func main() {
     wg.Wait()
 }
 ```
+---
+<h3 id="subject_24">Golang中的sync包是用来干什么的？</h3>
+
+sync 包是 Go 标准库中负责并发同步的核心包，主要用来解决多个 Goroutine 访问共享资源时的数据竞争问题。它提供了多种同步原语，包括：  
+**Mutex / RWMutex**：互斥锁和读写锁，保护临界区资源  
+**WaitGroup**：等待一组 Goroutine 全部完成  
+**Once**：保证某段代码只执行一次（如单例初始化）  
+**Cond**：条件变量，用于等待或通知其他 Goroutine 条件变化  
+**sync.Map**：并发安全的 Map，适合读多写少场景  
+**Semaphore（Go 1.21+）**：限制并发数量的信号量  
+
+---
+
+<h3 id="subject_25">Golang中的channel会造成死锁吗？</h3>
+
+会。Channel 死锁主要发生在 Goroutine 永远无法完成 Channel 操作（发送 / 接收）的情况，导致程序永久阻塞。  
+
+**常见死锁场景：**
+- 单 Goroutine 操作无缓冲 channel：发送后没人接收，或接收时 channel 为空。
+- 缓冲 channel 已满仍发送：没有 Goroutine 读取数据释放空间。
+- 多个 Goroutine 互相等待：如 A 等 B 的数据，B 等 A 的数据。
+- 关闭已关闭的 channel：会 panic，可能引发连锁阻塞。
+- 向已关闭 channel 发送数据：会 panic。
+
+**避免方法：** 
+- 确保发送方与接收方数量匹配。
+- 用 select + default 避免永久阻塞。
+- 使用带缓冲 channel 平衡生产消费速度。
+- 正确关闭 channel（通常由发送方关闭）。
+- 使用 context 设置超时或取消。
+---
 <br>
 
 ## 四、内存与性能
-<h3 id="subject_21">Golang 的垃圾回收（GC）机制及演进过程是什么？</h3>
+<h3 id="subject_26">Golang 的垃圾回收（GC）机制及演进过程是什么？</h3>
 
 GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减轻开发者手动管理内存的负担。  
 
@@ -436,7 +520,9 @@ GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减�
 ③ 堆对象引用变化时，触发写屏障：被删除引用的对象标记为灰色，被添加引用的对象标记为灰色；  
 - 效果：彻底消除栈扫描的 STW，STW 时间缩短至微秒级，几乎不影响服务。
 
-<h3 id="subject_22">什么是内存逃逸？哪些情况会导致内存逃逸？</h3>
+---
+
+<h3 id="subject_27">什么是内存逃逸？哪些情况会导致内存逃逸？</h3>
 
 本该分配到栈上的变量最终分配到堆上，即为内存逃逸。  
 
@@ -447,8 +533,9 @@ GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减�
 4. **slice / Map 存储指针**：slice或 Map 中存储指针（如[]*int、map[string]*struct{}），指针指向的变量需逃逸到堆，避免底层数组 / Map 释放后指针悬空。
 5. **slice 扩容后长度过大**：若slice扩容后长度远超栈容量（如make([]int, 10000)），会逃逸到堆。
 6. **接口类型存储值**：当值存入接口（如var i interface{} = x），若值类型不确定（需 runtime 动态判断），可能导致值逃逸到堆。
-
-<h3 id="subject_23">Go 是如何分配内存的？</h3>
+   
+---
+<h3 id="subject_28">Go 是如何分配内存的？</h3>
 
 **1. 内存区域划分**
 - 堆（Heap）：存放动态分配的对象，由 Go 分配器管理，会被 GC 回收。
@@ -480,8 +567,10 @@ Go 分配器把堆分成几个层级管理：
 - 中等对象走 mcentral
 - 大对象直接从 mheap 向 OS 申请
 4. GC 回收 → 三色标记 + 写屏障，回收后内存回收到缓存复用。
+---
 
-<h3 id="subject_24">什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？</h3>
+<h3 id="subject_29">什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？</h3>
+
 内存泄漏指程序中已不再使用的内存未被 GC 回收，长期积累导致内存占用过高，甚至引发 OOM（Out Of Memory）。  
 
 常见场景：
@@ -500,10 +589,48 @@ Go 分配器把堆分成几个层级管理：
 - 内存泄漏分析：go run -memprofile mem.pprof main.go，运行后通过go tool pprof mem.pprof查看内存占用，重点关注 “inuse_space”（当前内存占用）和 “alloc_space”（总分配内存）的增长趋势。
 - Goroutine 泄漏分析：go run -blockprofile block.pprof main.go，查看 Goroutine 阻塞情况；或通过runtime.NumGoroutine()监控 Goroutine 数量，若数量持续增长则可能存在泄漏。  
 2）日志与监控：在关键位置打印 Goroutine ID、内存占用，结合 Prometheus+Grafana 监控内存和 Goroutine 数量变化。
+---
+
+<h3 id="subject_30">性能分析有哪些方式</h3>
+
+- pprof：CPU、内存、阻塞、goroutine 分析。
+```bash
+go tool pprof http://127.0.0.1:6060/debug/pprof/profile
+```
+- trace：分析调度、GC、网络阻塞等。  
+- benchmark：性能基准测试。  
+```go
+func BenchmarkXXX(b *testing.B) { ... }
+```
+---
+
+<h3 id="subject_31">如何用context控制超时时间</h3>
+
+使用context.WithTimeout或context.WithDeadline创建带超时的上下文，配合 select 实现超时控制。
+
+```go
+ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+defer cancel()
+
+result := make(chan string)
+go func() {
+    time.Sleep(5 * time.Second)
+    result <- "done"
+}()
+
+select {
+case res := <-result:
+    fmt.Println(res)
+case <-ctx.Done():
+    fmt.Println("timeout:", ctx.Err())
+}
+```
+---
+
 <br>
 
 ## 五、工程化实践
-<h3 id="subject_25">如何使用 context 包进行 Goroutine 间的上下文管理？</h3>
+<h3 id="subject_32">如何使用 context 包进行 Goroutine 间的上下文管理？</h3>
 
 在 Go 语言中，context 包是用于在 goroutine 之间传递上下文信息的工具，主要解决超时控制、取消信号传递、数据传递等问题。它是 Go 并发编程中协调多个 goroutine 生命周期的核心机制。  
 
@@ -522,6 +649,28 @@ context的核心功能：
 在分布式系统中，一个请求可能经过多个服务或 goroutine，通过 context 传递请求 ID、用户 Token 等元数据，便于日志追踪和权限验证。
 - 多层级任务的生命周期管理
 当任务存在嵌套关系（如 A 启动 B，B 启动 C），context 可实现 “链式取消”：取消 A 时，B 和 C 也会被自动取消。
+---
+
+
+<h3 id="subject_33">怎么实现单例模式</h3>
+
+使用sync.Once实现线程安全的懒加载单例。
+```go
+import "sync"
+
+var (
+    instance *DB
+    once     sync.Once
+)
+
+func GetDB() *DB {
+    once.Do(func() {
+        instance = &DB{} // 只执行一次
+    })
+    return instance
+}
+```
+---
 
 
 
