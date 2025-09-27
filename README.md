@@ -1415,7 +1415,7 @@ func (c *UserAPIController) Delete() {
     c.ServeJSON()
 }
 ```
-
+参考资料：http://www.topgoer.cn/docs/beegozhongwenwendang/beegozhongwenwendang-1c5087bb5qpst
 
 
 
