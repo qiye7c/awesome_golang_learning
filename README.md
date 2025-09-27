@@ -24,7 +24,7 @@
   * [网络基础](#-网络基础)
   * [MySQL](#-MySQL)
   * [Redis](#-Redis)
-* [Gin框架](#-Gin框架)
+* [Web框架](#-Web框架)
 * [项目实战](#-项目实战)
 ---
 
@@ -149,6 +149,32 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 | 22 | [同步原语与锁](https://draven.co/golang/docs/part3-runtime/ch06-concurrency/golang-sync-primitives/) |
 | 23 |[使用Golang实现高效二分查找算法详解与实战案例](https://www.oryoy.com/news/shi-yong-golang-shi-xian-gao-xiao-er-fen-cha-zhao-suan-fa-xiang-jie-yu-shi-zhan-an-li.html)|
 | 24 |[掌握Golang项目从零到部署：全面解析持续集成与持续部署实践](https://www.oryoy.com/news/zhang-wo-golang-xiang-mu-cong-ling-dao-bu-shu-quan-mian-jie-xi-chi-xu-ji-cheng-yu-chi-xu-bu-shu-shi.html)|
+| 25 | [Go语言中常见100问题](https://cloud.tencent.com/developer/article/2072968?policyId=1004) |
+| 26 | [Go 精妙的互斥锁设计](https://cloud.tencent.com/developer/article/2433029?policyId=1004) |
+| 27 | [基于go语言gin框架的web项目骨架](https://juejin.cn/post/7281601361985241088?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 28 | [Golang Context深入理解](https://juejin.cn/post/6844903555145400334?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 29 | [打造 Go 语言最快的排序算法](https://juejin.cn/post/7091536692544274440?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 30 | [Go知识点：Go Module包管理器](https://juejin.cn/post/7367635686936608819?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 31 | [如何写出优雅的 Golang 代码](https://juejin.cn/post/6844903856405495822?searchId=202509271335574E0CE7144EF7CD1010F) |
+| 32 | [Go语言错误码设计与管理实践](https://juejin.cn/post/7270331043235971106?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 33 | [Golang进阶4-Go 工程化实践和配置中心](https://juejin.cn/post/6904595334693912584?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 34 | [Golang 任务队列策略](https://juejin.cn/post/6844903513412075527?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 35 | [golang中beego框架代理问题；及go mod使用教程](https://juejin.cn/post/6883660959693570055?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 36 | [详解Go语言I/O多路复用netpoller模型](https://juejin.cn/post/6926873365881815053?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 37 | [Golang socket数据结构](https://juejin.cn/post/6844903516880764942?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 38 | [Golang gRPC微服务](https://juejin.cn/post/7008821521959370789?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 39 | [golang slice扩容原理](https://juejin.cn/post/7156859807322865672?searchId=202509271335574E0CE7144EF7CD1010F6) |
+| 40 | [Go 服务端开发总结](https://juejin.cn/post/7043587400131411976?searchId=20250927135416A86C658F83FA74B2ACAF) |
+| 41 | [Go 语言标准库 text/template 包深入浅出](https://juejin.cn/post/6844903762901860360?searchId=20250927135416A86C658F83FA74B2ACAF) |
+| 42 | [你不知道的 Golang 打包配置文件](https://juejin.cn/post/6943973550185250847) |
+| 43 | [为什么在Go语言中要慎用interface{}](https://juejin.cn/post/6844903591149322253?searchId=20250927135416A86C658F83FA74B2ACAF) |
+| 44 | [用Go语言实现23种设计模式](https://juejin.cn/post/7095581880200167432?searchId=20250927135416A86C658F83FA74B2ACAF) |
+| 45 | [编程语言错误处理机制的演变与 Go 的实践](https://juejin.cn/post/7470451739314257920?searchId=20250927135416A86C658F83FA74B2ACAF) |
+| 46 | [入门 go 语言汇编，看懂 GMP 源码](https://juejin.cn/post/7319484272531701812?searchId=20250927135416A86C658F83FA74B2ACAF) |
+
+
+
+
 
 
 
@@ -194,6 +220,65 @@ Golang（又称 Go）是由Google于 2009 年推出的静态强类型、编译�
 
 ---
 ## 🛠️ 相关技术
+
+# 网络基础
+## 一、为什么 Go 开发者需要网络知识  
+Go 语言的强项之一就是网络编程，很多项目直接基于 TCP/UDP/HTTP 协议，比如：
+- Web 后端（HTTP API）
+- 微服务（gRPC、HTTP/2）
+- 中间件（代理、网关、消息队列客户端）
+- 分布式系统（服务发现、负载均衡）
+  
+如果不懂网络基础，就很难理解 Go 网络库的设计原理和运行机制，遇到问题也不知道怎么排查。
+
+---
+
+## 二、Web 开发必备网络理论
+
+### 2.1 TCP/IP 四层模型
+- 网络接口层（ARP、MAC）
+- 网络层（IP 地址、ICMP、路由）
+- 传输层（TCP、UDP）
+- 应用层（HTTP、DNS、WebSocket）
+---
+
+### 2.2 核心协议详解（★★★★★ 核心）
+#### （1）TCP 协议（Go 网络开发的 "基石"）
+| 核心特性       | 原理要点                                                                 | Go 中需注意的问题                                           |
+|----------------|--------------------------------------------------------------------------|------------------------------------------------------------|
+| 面向连接       | 三次握手（建立）、四次挥手（断开）                                       | 避免 "半连接"（用`net.Listen`的`Accept`自动处理）            |
+| 可靠传输       | 序列号、确认应答（ACK）、重传机制                                         | 无需手动实现，Go 标准库已封装                               |
+| 粘包 / 拆包    | 原因：TCP 是 "流协议"，无消息边界                                        | 需手动处理（3种方案：固定长度 / 分隔符 / 消息头 + 长度）    |
+| 拥塞控制       | 慢启动→拥塞避免→快速重传→快速恢复                                        | 理解即可，Go 底层自动适配                                   |
+
+#### （2）HTTP 协议（Web/API 开发必备）
+| 核心组成       | 原理要点                                                                 | Go 中对应操作                                               |
+|----------------|--------------------------------------------------------------------------|------------------------------------------------------------|
+| 请求结构       | 请求行（方法 + URL + 版本）→请求头→请求体                                | `http.Request`结构体（`r.Method`/`r.URL`/`r.Body`）          |
+| 响应结构       | 状态行（版本 + 状态码）→响应头→响应体                                    | `http.ResponseWriter`（`w.WriteHeader`/`w.Write`）           |
+| 方法 / 状态码  | 常用方法：GET（查）、POST（增）、PUT（改）、DELETE（删）<br>常用状态码：200（成功）、404（未找到）、500（服务错） | `r.Method`判断请求类型<br>`w.WriteHeader(http.StatusOK)`设置状态码 |
+| 版本差异       | HTTP 1.1（长连接）、HTTP 2（多路复用）、HTTP 3（基于 UDP）                | Go `net/http`默认支持 HTTP 1.1，需扩展库支持 HTTP 2/3       |
+
+#### （3）UDP 协议（实时场景补充）
+| 核心特性       | 原理要点                                                                 | Go 应用场景                                                 |
+|----------------|--------------------------------------------------------------------------|------------------------------------------------------------|
+| 无连接         | 无需握手，直接发数据包                                                   | 视频 / 语音传输、游戏同步、心跳检测                         |
+| 不可靠         | 不保证送达、不保证顺序                                                   | 需上层实现重传（如 RTCP 协议）                              |
+| 轻量快速       | 数据包体积小，延迟低                                                     | 高性能场景（如日志收集）                                   |
+
+
+---
+### 三、相关书籍
+- 《计算机网络（谢希仁）》
+- 《TCP/IP 详解 卷 1：协议》
+- 《HTTP 权威指南》
+---
+### 四、在线资源
+- [Go 标准库 net 包文档](https://pkg.go.dev/net)
+- [Go 标准库 net/http 包文档](https://pkg.go.dev/net/http)
+- [TopGoer 教程/网络编程](http://www.topgoer.com/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/)
+---
+
 
 # 🐬 MySQL
 
@@ -618,6 +703,199 @@ func main() {
 ---
 
 # 💾 Redis
+
+---
+
+# 👷 web框架
+## Gin框架
+### 一、Gin 框架简介  
+Gin 是一个用 Go (Golang) 编写的高性能 HTTP Web 框架。它基于 Radix Tree 路由算法，性能接近原生 net/http，同时提供了简洁易用的 API 和灵活的中间件机制。
+Gin 非常适合：
+- 构建高性能的 RESTful API
+- 微服务架构
+- 快速开发 Web 应用
+- 需要高度扩展性的项目
+
+为什么选择 Gin？
+⚡ 高性能：基于 Radix Tree 路由，处理请求速度极快
+📦 轻量级：核心代码简洁，依赖少
+🔌 中间件支持：灵活的中间件机制，易于扩展
+📝 JSON 自动绑定：方便处理请求数据和返回响应
+🌐 丰富的生态：大量官方和社区开发的插件
+📚 详细文档：完善的中文和英文文档
+
+### 二、安装Gin
+2.1 首先需要安装Go（需要1.10+版本），然后可以使用下面的Go命令安装Gin。
+```bash
+go get -u github.com/gin-gonic/gin
+```
+
+2.2 将其导入您的代码中：
+```bash
+import “github.com/gin-gonic/gin”
+```
+示例：
+```go
+package main
+
+import "github.com/gin-gonic/gin"
+
+func main() {
+    // 创建一个默认的 Gin 引擎（带 Logger 和 Recovery 中间件）
+    r := gin.Default()
+
+    // 定义路由
+    r.GET("/ping", func(c *gin.Context) {
+        c.JSON(200, gin.H{
+            "message": "pong",
+        })
+    })
+
+    // 启动服务
+    r.Run(":8080")
+}
+```
+运行：
+```bash
+go run main.go
+curl http://localhost:8080/ping
+```
+---
+### 三、核心功能
+#### 3.1 路由  
+Gin 支持多种路由类型：
+```go
+// 基本路由
+r.GET("/hello", func(c *gin.Context) { c.String(200, "Hello Gin") })
+r.POST("/submit", submitHandler)
+
+// 参数路由
+r.GET("/user/:name", func(c *gin.Context) {
+    name := c.Param("name")
+    c.String(200, "Hello %s", name)
+})
+// 通配符路由
+r.GET("/assets/*filepath", func(c *gin.Context) {
+    path := c.Param("filepath")
+    c.String(200, "Asset path: %s", path)
+})
+```
+✅ 场景：适用于构建 RESTful API、版本化 API（如 /v1/user）、静态资源服务等。  
+<br>
+#### 3.2 路由分组（routes group）  
+通过 `Group` 可以将一组路由归类，方便管理中间件和路径前缀：
+```go
+// API 版本 1
+v1 := r.Group("/v1")
+v1.GET("/login", loginHandler)
+v1.POST("/submit", submitHandler)
+
+// API 版本 2
+v2 := r.Group("/v2")
+v2.GET("/user", getUserHandler)
+v2.POST("/upload", uploadHandler)
+```
+✅ 场景：多版本 API 管理、后台与前台路由分离、权限控制分组等。  
+<br>
+#### 3.3 参数绑定与校验  
+Gin 支持自动将请求数据（JSON、表单、Query 参数等）绑定到结构体，并支持数据校验：
+```go
+type LoginRequest struct {
+    Username string `json:"username" binding:"required"`
+    Password string `json:"password" binding:"required,min=6"`
+}
+
+r.POST("/login", func(c *gin.Context) {
+    var req LoginRequest
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
+    c.JSON(200, gin.H{"status": "login success"})
+})
+```
+✅ 场景：API 输入验证、减少重复解析代码、提高开发效率。  
+<br>
+#### 3.4 中间件机制  
+Gin 的中间件机制非常灵活，可以在请求处理的不同阶段插入自定义逻辑：
+```go
+// 自定义日志中间件
+func Logger() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        t := time.Now()
+        c.Next() // 调用后续处理函数
+        latency := time.Since(t)
+        log.Printf("method=%s path=%s latency=%s", c.Request.Method, c.Request.URL.Path, latency)
+    }
+}
+
+// 应用中间件
+r.Use(Logger())
+```
+常用内置中间件：
+- gin.Logger()：请求日志记录
+- gin.Recovery()：Panic 恢复并返回 500
+- gin.BasicAuth()：HTTP 基本认证
+
+✅ 场景：日志记录、权限验证、跨域处理、限流、请求耗时统计等。  
+<br>
+#### 3.5 响应渲染  
+Gin 支持多种响应格式，让你轻松返回 JSON、XML、HTML 等数据：
+```go
+// JSON 响应
+c.JSON(200, gin.H{"message": "hello"})
+
+// XML 响应
+c.XML(200, gin.H{"message": "hello"})
+
+// HTML 模板渲染
+r.LoadHTMLGlob("templates/*")
+c.HTML(200, "index.tmpl", gin.H{
+    "title": "Gin Example",
+})
+```
+✅ 场景：API 数据返回、网页渲染、前后端分离项目。  
+<br>
+#### 3.6 静态文件服务  
+轻松提供静态文件访问：
+```go
+// 提供整个目录
+r.Static("/assets", "./assets")
+
+// 提供单个文件
+r.StaticFile("/favicon.ico", "./resources/favicon.ico")
+```
+✅ 场景：网站图片、CSS、JavaScript 文件、下载文件等。  
+<br>
+#### 3.7 文件上传  
+支持单文件和多文件上传：
+```go
+// 单文件上传
+r.POST("/upload", func(c *gin.Context) {
+    file, _ := c.FormFile("file")
+    c.SaveUploadedFile(file, "./uploads/"+file.Filename)
+    c.JSON(200, gin.H{"message": "file uploaded"})
+})
+```
+✅ 场景：用户头像上传、附件上传、批量文件上传。  
+<br>
+#### 3.8 异步任务  
+支持在请求处理中启动异步任务，避免阻塞响应：
+```go
+r.GET("/long_async", func(c *gin.Context) {
+    // 创建请求上下文副本
+    cCp := c.Copy()
+    go func() {
+        time.Sleep(5 * time.Second)
+        log.Println("Async task done: " + cCp.Request.URL.Path)
+    }()
+    c.JSON(200, gin.H{"status": "processing"})
+})
+```
+✅ 场景：发送邮件、生成报表、日志处理等耗时操作。  
+<br>
+#### 💡 总结  
+Gin 的核心功能覆盖了 Web 开发的大部分需求，尤其是 **路由系统、中间件机制、参数绑定** 这三大特性，让开发者可以快速构建高性能、可扩展的 Web 应用。无论是轻量级 API 还是复杂的微服务，Gin 都能提供简洁而强大的工具支持。
 
 ---
 ##  💻 项目实战
