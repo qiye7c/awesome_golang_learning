@@ -1,17 +1,19 @@
 # Golang面试题  
-整理Golang面试中高频出现的基础、进阶、工程化相关问题，包含大厂面试题，方便查阅和复习。
+整理Golang面试中高频出现的基础、进阶、数据库、中间件等问题，包含大厂面试题，方便查阅和复习。
 
-## 目录
+# 目录
 
  [一、语言基础](#一语言基础)  
  [二、数据结构](#二数据结构)  
  [三、并发编程](#三并发编程)  
  [四、内存与性能](#四内存与性能)  
  [五、工程化实践](#五工程化实践)  
+ [六、MySQL](#六MySQL)  
+ [七、Redis](#七Redis)
 ---
 
-## 一、语言基础
-<h3 id="subject_1">golang 中 make 和 new 的区别</h3>
+# 一、语言基础
+<h2 id="subject_1">golang 中 make 和 new 的区别</h2>
 
 1. 作用类型不同：new可给string、int、数组等值类型分配内存；make仅用于slice、map、channel这三种引用类型的初始化。  
 2. 返回值类型不同：new返回指向目标类型的指针（如*int）；make返回引用类型本身（如[]int、map[string]int）。  
@@ -19,7 +21,7 @@
 4. 内存分配位置：Golang 会通过编译期逃逸分析自动决定内存分配在栈或堆，new和make不直接指定分配位置，但make创建的引用类型因需动态管理（如slice扩容），更易逃逸到堆。  
 ---
 
-<h3 id="subject_2">数组和切片（slice）的区别是什么？（高频）</h3>
+<h2 id="subject_2">数组和切片（slice）的区别是什么？（高频）</h2>
 
 1. 长度特性：数组长度在声明时固定（如[5]int），无法动态修改；切片长度可变（如[]int），可通过append()动态扩容。  
 2. 类型本质：数组是值类型，赋值或传参时会复制整个数组，内存开销大；切片是引用类型，底层依赖数组，赋值 / 传参时仅复制切片结构体（含底层数组指针、长度、容量），共享底层数组。  
@@ -29,7 +31,7 @@
 4. 扩容机制：数组无扩容能力；切片容量不足时会自动扩容，规则为：容量＜1024 时翻倍，≥1024 时按 1.25 倍扩容，且需考虑内存对齐。
 ---
 
-<h3 id="subject_3">defer 关键字的作用、执行顺序及对返回值的影响是什么？（高频）</h3>
+<h2 id="subject_3">defer 关键字的作用、执行顺序及对返回值的影响是什么？（高频）</h2>
 
 1. 作用：延迟执行函数，常用于资源释放（如关闭文件、解锁互斥锁）、异常捕获（搭配recover()），确保函数退出前执行收尾操作。
 2. 执行顺序：多个defer按 “后进先出（LIFO）” 执行，即最后声明的defer最先执行（类似栈结构）。
@@ -54,7 +56,7 @@ func g() int {
 ```
 ---
 
-<h3 id="subject_4">字符串拼接的方式有哪些？哪种效率最高？</h3>
+<h2 id="subject_4">字符串拼接的方式有哪些？哪种效率最高？</h2>
 
 常见拼接方式及效率排序（从高到低）：strings.Join ≈ strings.Builder ＞ bytes.Buffer ＞ + ＞ fmt.Sprintf。  
 
@@ -66,7 +68,7 @@ func g() int {
 4. fmt.Sprintf：需通过反射解析参数类型，存在额外性能损耗，仅适合简单格式化场景，不适合高频拼接。  
 ---
 
-<h3 id="subject_5">rune 类型的作用是什么？与 byte 的区别是什么？</h3>
+<h2 id="subject_5">rune 类型的作用是什么？与 byte 的区别是什么？</h2>
 
 rune作用：rune是int32的别名，用于表示 Unicode 字符（如中文字符、特殊符号），解决 Golang 中字符串按字节存储（byte）无法正确处理多字节字符的问题。  
 
@@ -81,7 +83,7 @@ fmt.Println(len(str)) // 输出12（"hello "占6字节，"你好"占6字节）
 fmt.Println(len([]rune(str))) // 输出8（"hello "占5字符，"你好"占3字符）
 ```
 ---
-<h3 id="subject_6">反射（reflection）是什么？如何使用反射获取类型信息和修改变量值？</h3>
+<h2 id="subject_6">反射（reflection）是什么？如何使用反射获取类型信息和修改变量值？</h2>
 反射是 Golang 提供的运行时类型检查与操作机制，通过reflect包可动态获取变量的类型信息（如类型名、方法、字段），修改变量值，调用方法，无需在编译期确定变量类型。 
 
 1. 从接口值到反射对象：通过reflect.TypeOf()获取变量的类型信息（reflect.Type），通过reflect.ValueOf()获取变量的值信息（reflect.Value）。
@@ -89,7 +91,7 @@ fmt.Println(len([]rune(str))) // 输出8（"hello "占5字符，"你好"占3字�
 3. 仅可修改 “可设置”（settable）的反射对象：若反射对象代表的是变量本身（而非副本），则可修改其值；判断标准是reflect.Value.CanSet()返回true。
 ---
 
-<h3 id="subject_7">Go 语言中 struct tag 的作用是什么？</h3>
+<h2 id="subject_7">Go 语言中 struct tag 的作用是什么？</h2>
 
 1. 序列化 / 反序列化配置
     - 指定 JSON/XML 等格式的字段名
@@ -103,7 +105,7 @@ fmt.Println(len([]rune(str))) // 输出8（"hello "占5字符，"你好"占3字�
     - 生成 Swagger API 文档
  ---
  
-<h3 id="subject_8">说说 Go 中的 init 函数，和它的执行顺序</h3>  
+<h2 id="subject_8">说说 Go 中的 init 函数，和它的执行顺序</h2>  
 
 init 函数是 Go 语言中一个特殊的预声明函数，用于包的初始化工作。它在程序启动时自动执行，无需手动调用。  
 
@@ -120,14 +122,14 @@ init 函数是 Go 语言中一个特殊的预声明函数，用于包的初始�
 - 不能作为方法或匿名函数
 ---
 
-<h3 id="subject_9">Go 语言中函数是值传递还是引用传递？</h3> 
+<h2 id="subject_9">Go 语言中函数是值传递还是引用传递？</h2> 
 
 Go 语言中 所有参数传递都是值传递。  
 - 对于引用类型（slice、map、chan、指针、interface），传递的是一个指向底层数据结构的指针的拷贝，因此在函数内可以修改原数据。
 - 对于值类型（int、string、struct 等），传递的是值的副本，函数内修改不会影响原值。
 ---
 
-<h3 id="subject_10">nil interface {} 与 nil 的区别</h3> 
+<h2 id="subject_10">nil interface {} 与 nil 的区别</h2> 
 
 interface{} 底层有两个字段：
 - 类型信息 (type)
@@ -138,14 +140,14 @@ interface{} 底层有两个字段：
 
 ---
 
-<h3 id="subject_11">类型断言和类型转换的区别</h3> 
+<h2 id="subject_11">类型断言和类型转换的区别</h2> 
 
 - 类型转换：编译期进行，转换的是已知类型，比如 int(x)。
 - 类型断言：运行期进行，用于判断接口变量实际存储的类型，比如 v, ok := x.(T)。
 - 类型断言失败会 panic（不带 ok 时），带 ok 时返回 false。
 ---
 
-<h3 id="subject_12">Go 没有传统的“异常机制”，产生 panic 后如何捕获？</h3> 
+<h2 id="subject_12">Go 没有传统的“异常机制”，产生 panic 后如何捕获？</h2> 
 
 当发生 panic 时，程序会中断正常流程并开始执行延迟函数（defer），可以通过在 defer 函数中调用 recover 来捕获 panic，阻止其继续向上蔓延，从而实现类似“异常捕获”的效果。
 
@@ -154,9 +156,9 @@ interface{} 底层有两个字段：
 
 <br>
 
-## 二、数据结构
+# 二、数据结构
 
-<h3 id="subject_13">Map 的底层实现、并发安全性及扩容机制是什么？</h3>
+<h2 id="subject_13">Map 的底层实现、并发安全性及扩容机制是什么？</h2>
 
 底层实现：基于哈希表，核心结构为hmap（哈希表元数据）和bmap（桶）：
 - hmap：存储哈希表整体信息，如元素数量（count）、桶数量的对数（B，桶数 = 2^B）、桶数组指针（buckets）、旧桶指针（oldbuckets，扩容时使用）、哈希种子（hash0）。
@@ -166,17 +168,17 @@ interface{} 底层有两个字段：
 1. 加锁：使用sync.Mutex（互斥锁）或sync.RWMutex（读写锁，读多写少时更高效）包裹map操作。  
 2. 使用sync.Map：Go 标准库为并发场景设计的map，通过 “读写分离”（read只读 map+dirty可写 map）减少锁竞争，适合读多写少、键值稳定的场景（如配置缓存）。
 
-#### 扩容机制触发条件：
+**扩容机制触发条件：**
 - 装载因子超过阈值：装载因子 = 元素数量 /(桶数 ×8)，阈值为 6.5，超过则需扩容。  
 - 溢出桶过多：当桶数＜2^15 时，溢出桶数≥桶数；当桶数≥2^15 时，溢出桶数≥2^15，需扩容减少哈希冲突。
 
-#### 扩容流程：
+ **扩容流程：**
 - 新建桶数组（容量为原桶数的 2 倍），将oldbuckets指向原桶数组，buckets指向新桶数组。
 - 渐进式迁移：每次操作map（如读写）时，迁移 1~2 个旧桶的键值对到新桶，避免一次性迁移导致 STW。
 - 迁移完成后，释放oldbuckets内存。
 ---
 
-<h3 id="subject_14">如何判断 Map 中是否包含某个键？如何实现有序 Map？</h3>
+<h2 id="subject_14">如何判断 Map 中是否包含某个键？如何实现有序 Map？</h2>
 
 判断键是否存在：
 通过v, ok := m[key]的ok值判断，ok为true表示键存在，false表示不存在（v为对应值的零值）。
@@ -239,13 +241,13 @@ func (om *OrderedMap) Range(fn func(key string, val int)) {
 }
 ```
 ---
-<h3 id="subject_15">golang 哪些类型可以作为 map key？</h3>
+<h2 id="subject_15">golang 哪些类型可以作为 map key？</h2>
 
 在golang规范中，可比较的类型都可以作为map key；
 
 ---
 
-<h3 id="subject_16">golang 规范中，哪些数据类型不可以比较？</h3>
+<h2 id="subject_16">golang 规范中，哪些数据类型不可以比较？</h2>
 
 不能作为map key 的类型包括：
 1. slices
@@ -253,7 +255,7 @@ func (om *OrderedMap) Range(fn func(key string, val int)) {
 3. functions
 ---
 
-<h3 id="subject_17">slice 的底层结构是怎样的？</h3>
+<h2 id="subject_17">slice 的底层结构是怎样的？</h2>
 
 Go语言中的切片（slice）是一种动态数组，它的底层数据结构包括三个关键的属性：指针、长度和容量。
 
@@ -264,7 +266,7 @@ Go语言中的切片（slice）是一种动态数组，它的底层数据结构�
 Go语言的切片是引用类型，它们不存储任何数据，只描述底层数组的一段。更改切片的元素会修改其底层数组中的对应元素。
 
 ---
-<h3 id="subject_18">slice 是怎么扩容的？</h3>
+<h2 id="subject_18">slice 是怎么扩容的？</h2>
 
 **Go 1.17 及之前**  
 
@@ -301,7 +303,7 @@ newcap = oldcap + (oldcap + 3*256) / 4
 
 ---
 
-<h3 id="subject_19">java和go语言数据结构有什么共同点？</h3>
+<h2 id="subject_19">java和go语言数据结构有什么共同点？</h2>
 
 Java 和 Go 在数据结构上的共同点主要体现在核心设计思想一致：  
 - 都有基础类型（整数、浮点数、布尔、字符、字符串），且字符串不可变
@@ -317,8 +319,8 @@ Java 和 Go 在数据结构上的共同点主要体现在核心设计思想一�
 
 <br>
 
-## 三、并发编程
-<h3 id="subject_20">Goroutine 是什么？与线程的区别是什么？如何创建 Goroutine？</h3>
+# 三、并发编程
+<h2 id="subject_20">Goroutine 是什么？与线程的区别是什么？如何创建 Goroutine？</h2>
 
 Goroutine 是 Golang 的轻量级用户态线程，由 Go 运行时（runtime）调度，而非操作系统内核调度，是实现并发的核心组件。  
 与线程的区别：
@@ -341,7 +343,7 @@ go add(1, 2)
 ```
 ---
 
-<h3 id="subject_21">golang 的进程、线程、协程的区别</h3>
+<h2 id="subject_21">golang 的进程、线程、协程的区别</h2>
 
 - 进程：OS 资源分配的基本单位，独立内存空间，资源占用最大，切换成本最高，进程间隔离。
 - 线程：进程内的执行单元，共享进程资源，资源占用中等，由 OS 调度，切换成本较高。
@@ -361,7 +363,7 @@ go add(1, 2)
 
 ---
 
-<h3 id="subject_22">Channel 的作用、底层结构及线程安全性如何？</h3>
+<h2 id="subject_22">Channel 的作用、底层结构及线程安全性如何？</h2>
 
 作用：Channel 是 Golang 中 Goroutine 间的通信机制，实现 “通过通信共享内存”，支持同步 / 异步通信，还可用于 Goroutine 间同步（如控制并发顺序）。  
 
@@ -375,7 +377,7 @@ go add(1, 2)
 线程安全性：Channel 是线程安全的，所有操作（发送、接收、关闭）均通过lock互斥锁保证原子性，多个 Goroutine 并发操作同一个 Channel 不会出现数据竞争。
 
 ---
-<h3 id="subject_23">无缓冲 Channel 和带缓冲 Channel 的区别是什么？</h3>
+<h2 id="subject_23">无缓冲 Channel 和带缓冲 Channel 的区别是什么？</h2>
 
 核心区别：基于缓冲区是否存在，决定通信的同步 / 异步特性。  
 
@@ -404,7 +406,7 @@ ch2 <- 2 // 缓冲区未满，正常发送
 fmt.Println(<-ch2) // 接收后，缓冲区有空闲位置
 ```
 ---
-<h3 id="subject_24">GMP 调度模型的核心组件及调度流程是什么？（高频）</h3>
+<h2 id="subject_24">GMP 调度模型的核心组件及调度流程是什么？（高频）</h2>
 
 核心组件：
 - G（Goroutine）：轻量级用户线程，包含 Goroutine 执行栈、状态（如Grunnable、Grunning）等，是调度的基本单位。
@@ -421,7 +423,7 @@ fmt.Println(<-ch2) // 接收后，缓冲区有空闲位置
 4. Work Stealing（工作窃取）：当 P 的 LRQ 为空时，P 会从其他 P 的 LRQ 或全局队列 GRQ 中 “窃取” G 执行，避免 M 空闲。
 ---
 
-<h3 id="subject_25">如何控制 Goroutine 的并发数量？</h3>
+<h2 id="subject_25">如何控制 Goroutine 的并发数量？</h2>
 
 常用两种方式，核心是通过 “资源限制” 或 “任务队列” 控制并发数：
   
@@ -487,7 +489,7 @@ func main() {
 }
 ```
 ---
-<h3 id="subject_26">Golang中的sync包是用来干什么的？</h3>
+<h2 id="subject_26">Golang中的sync包是用来干什么的？</h2>
 
 sync 包是 Go 标准库中负责并发同步的核心包，主要用来解决多个 Goroutine 访问共享资源时的数据竞争问题。它提供了多种同步原语，包括：  
 **Mutex / RWMutex**：互斥锁和读写锁，保护临界区资源  
@@ -499,7 +501,7 @@ sync 包是 Go 标准库中负责并发同步的核心包，主要用来解决�
 
 ---
 
-<h3 id="subject_27">Golang中的channel会造成死锁吗？</h3>
+<h2 id="subject_27">Golang中的channel会造成死锁吗？</h2>
 
 会。Channel 死锁主要发生在 Goroutine 永远无法完成 Channel 操作（发送 / 接收）的情况，导致程序永久阻塞。  
 
@@ -518,13 +520,13 @@ sync 包是 Go 标准库中负责并发同步的核心包，主要用来解决�
 - 使用 context 设置超时或取消。
 ---
 
-<h3 id="subject_28">golang如何实现生产消费者模型？</h3>
+<h2 id="subject_28">golang如何实现生产消费者模型？</h2>
 在Go语言中，生产者消费者模型通常通过**goroutine**和**channel**来实现。  
 生产者goroutine将数据发送到channel中，消费者goroutine从channel接收数据并处理。通过缓冲channel或无缓冲channel可以控制并发行为和同步机制，从而安全高效地实现生产者消费者模型。
 
 ---
 
-<h3 id="subject_29">go开发中，如何保证并发安全？</h3>
+<h2 id="subject_29">go开发中，如何保证并发安全？</h2>
 
 Go 开发中保证并发安全的核心原则是避免多个 Goroutine 同时访问并修改共享数据，主要通过以下方式实现：  
 1. 互斥锁（Mutex / RWMutex）
@@ -548,13 +550,13 @@ Go 开发中保证并发安全的核心原则是避免多个 Goroutine 同时访
    - 使用 context 控制超时和取消
  ---
 
- <h3 id="subject_30">讲一讲sync.map 怎么取出值？</h3>
+ <h2 id="subject_30">讲一讲sync.map 怎么取出值？</h2>
 
 在 Go 语言中，sync.Map 提供了 Load 方法来取出存储的值。  
 调用 m.Load(key) 会返回两个值：value 和 ok。其中 value 是对应 key 的值，ok 是一个布尔值，表示该 key 是否存在。如果 key 存在，ok 为 true；否则为 false。
 
  ---
- <h3 id="subject_31">map是并发安全的吗？</h3>
+ <h2 id="subject_31">map是并发安全的吗？</h2>
  
 map类型不是并发安全的。  
 多个goroutine同时对map进行读写操作（包括写写、读写）会导致程序出现竞态条件（race condition），从而引发panic或数据不一致。为了保证map的并发安全，可以使用sync.Mutex、sync.RWMutex、sync.Map，或者通过channel来控制访问。
@@ -571,8 +573,8 @@ map类型不是并发安全的。
 
 <br>
 
-## 四、内存与性能
-<h3 id="subject_32">Golang 的垃圾回收（GC）机制及演进过程是什么？</h3>
+# 四、内存与性能
+<h2 id="subject_32">Golang 的垃圾回收（GC）机制及演进过程是什么？</h2>
 
 GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减轻开发者手动管理内存的负担。  
 
@@ -598,7 +600,7 @@ GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减�
 
 ---
 
-<h3 id="subject_33">什么是内存逃逸？哪些情况会导致内存逃逸？</h3>
+<h2 id="subject_33">什么是内存逃逸？哪些情况会导致内存逃逸？</h2>
 
 本该分配到栈上的变量最终分配到堆上，即为内存逃逸。  
 
@@ -611,7 +613,7 @@ GC 核心目标：自动回收未被引用的内存，避免内存泄漏，减�
 6. **接口类型存储值**：当值存入接口（如var i interface{} = x），若值类型不确定（需 runtime 动态判断），可能导致值逃逸到堆。
    
 ---
-<h3 id="subject_34">Go 是如何分配内存的？</h3>
+<h2 id="subject_34">Go 是如何分配内存的？</h2>
 
 **1. 内存区域划分**
 - 堆（Heap）：存放动态分配的对象，由 Go 分配器管理，会被 GC 回收。
@@ -635,7 +637,7 @@ Go 分配器把堆分成几个层级管理：
 - 分配器会记录对象分配信息，GC 用三色标记 + 写屏障回收不再使用的对象。
 - 回收后的内存会放回对应 mspan，供下次复用。
 
-#### 精简版：
+## 精简版：
 1. 先做逃逸分析 → 不逃逸的放栈，逃逸的放堆。
 2. 栈分配 → 每个 goroutine 有独立栈，小且快，函数返回自动释放。
 3. 堆分配 → 由 Go 分配器管理：
@@ -645,7 +647,7 @@ Go 分配器把堆分成几个层级管理：
 4. GC 回收 → 三色标记 + 写屏障，回收后内存回收到缓存复用。
 ---
 
-<h3 id="subject_35">什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？</h3>
+<h2 id="subject_35">什么是内存泄漏？Golang 中常见的内存泄漏场景及排查方式是什么？</h2>
 
 内存泄漏指程序中已不再使用的内存未被 GC 回收，长期积累导致内存占用过高，甚至引发 OOM（Out Of Memory）。  
 
@@ -667,7 +669,7 @@ Go 分配器把堆分成几个层级管理：
 2）日志与监控：在关键位置打印 Goroutine ID、内存占用，结合 Prometheus+Grafana 监控内存和 Goroutine 数量变化。
 ---
 
-<h3 id="subject_36">性能分析有哪些方式</h3>
+<h2 id="subject_36">性能分析有哪些方式</h2>
 
 - pprof：CPU、内存、阻塞、goroutine 分析。
 ```bash
@@ -680,7 +682,7 @@ func BenchmarkXXX(b *testing.B) { ... }
 ```
 ---
 
-<h3 id="subject_37">如何用context控制超时时间</h3>
+<h2 id="subject_37">如何用context控制超时时间</h2>
 
 使用context.WithTimeout或context.WithDeadline创建带超时的上下文，配合 select 实现超时控制。
 
@@ -705,8 +707,8 @@ case <-ctx.Done():
 
 <br>
 
-## 五、工程化实践
-<h3 id="subject_38">如何使用 context 包进行 Goroutine 间的上下文管理？</h3>
+# 五、工程化实践
+<h2 id="subject_38">如何使用 context 包进行 Goroutine 间的上下文管理？</h2>
 
 在 Go 语言中，context 包是用于在 goroutine 之间传递上下文信息的工具，主要解决超时控制、取消信号传递、数据传递等问题。它是 Go 并发编程中协调多个 goroutine 生命周期的核心机制。  
 
@@ -728,7 +730,7 @@ context的核心功能：
 ---
 
 
-<h3 id="subject_39">怎么实现单例模式</h3>
+<h2 id="subject_39">怎么实现单例模式</h2>
 
 使用sync.Once实现线程安全的懒加载单例。
 ```go
@@ -745,6 +747,86 @@ func GetDB() *DB {
     })
     return instance
 }
+```
+---
+
+## 六、MySQL
+<h2 id="subject_40">MySQL的引擎有了解吗？</h2>
+
+MySQL支持多种存储引擎，常见的包括InnoDB、MyISAM、Memory、CSV、Archive等。  
+其中**InnoDB**是默认的存储引擎，支持ACID事务、行级锁、外键约束和崩溃恢复。
+
+---
+
+<h2 id="subject_41">MySQL 索引有哪些类型？</h2>
+
+1. 按数据结构  
+B + 树索引：最常用，支持范围查询和排序  
+哈希索引：适合等值查询，不支持范围查询  
+全文索引：全文检索，适合文本搜索
+2. 按功能逻辑  
+普通索引：基本索引，无约束  
+唯一索引：值唯一，允许 NULL  
+主键索引：特殊唯一索引，不允许 NULL  
+组合索引：多列组合，遵循最左前缀原则  
+全文索引：文本内容搜索  
+空间索引：地理空间数据  
+3. 按存储方式  
+聚簇索引：数据与索引存一起（InnoDB 主键）  
+非聚簇索引：数据与索引分开（MyISAM 所有索引，InnoDB 二级索引）  
+
+---
+
+<h2 id="subject_42">为什么 InnoDB 用 B+树做索引？</h2>
+
+1. 平衡树结构
+    - B+ 树是平衡多路查找树，所有叶子节点在同一层，查询时间复杂度稳定在 O (log n)。
+2. 磁盘友好  
+    - 每次访问一个节点相当于一次磁盘 IO，B+ 树高度低（通常 3~4 层），减少 IO 次数。
+    - 节点大小通常等于页大小（默认 16KB），一次 IO 能加载更多数据。
+3. 范围查询高效
+	- 叶子节点按顺序链接成链表，支持快速范围查找和排序。
+4. 聚簇索引优势
+    - 叶子节点存储行数据（聚簇索引），减少回表操作，提升查询性能。  
+5. 支持大量数据
+    - 多路分支特性，能存储海量数据而保持树高较小。
+
+---
+
+<h2 id="subject_43">哪些情况会导致索引失效？</h2>
+
+1. 函数或表达式操作索引列
+2. 对索引列进行计算
+```sql
+WHERE price + 10 > 100  -- 索引失效
+```
+3. 隐式类型转换
+```sql
+-- phone是字符串类型
+WHERE phone = 13800000000  -- 索引失效
+```
+4. 前导通配符的 LIKE 查询
+```sql
+WHERE name LIKE '%abc'  -- 索引失效
+WHERE name LIKE '%abc%' -- 索引失效
+WHERE name LIKE 'abc%'  -- 索引有效
+```
+5. OR 连接的非索引列
+```sql
+WHERE indexed_col = 1 OR non_indexed_col = 2  -- 索引可能失效
+```
+6. 违背最左前缀原则
+```sql
+-- 索引(a,b,c)
+WHERE b = 2 AND c = 3  -- 指定索引a，索引失效
+```
+7. 索引列上使用 NOT、<>、!=
+```sql
+WHERE status <> 1  -- 可能导致索引失效
+```
+8. 索引列参与计算或比较
+```sql
+WHERE col1 > col2  -- 索引可能失效
 ```
 ---
 
