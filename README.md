@@ -268,12 +268,12 @@ Go 语言的强项之一就是网络编程，很多项目直接基于 TCP/UDP/HT
 
 
 ---
-### 三、相关书籍
+## 三、相关书籍
 - 《计算机网络（谢希仁）》
 - 《TCP/IP 详解 卷 1：协议》
 - 《HTTP 权威指南》
 ---
-### 四、在线资源
+## 四、在线资源
 - [Go 标准库 net 包文档](https://pkg.go.dev/net)
 - [Go 标准库 net/http 包文档](https://pkg.go.dev/net/http)
 - [TopGoer 教程/网络编程](http://www.topgoer.com/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/)
@@ -282,9 +282,7 @@ Go 语言的强项之一就是网络编程，很多项目直接基于 TCP/UDP/HT
 
 # 🐬 MySQL
 
-## 使用Go语言连接MySQL
-
-### 一、安装MySQL驱动    
+## 一、安装MySQL驱动    
 
 1.1 安装 MySQL  
 首先，确保你的系统中安装了 MySQL 数据库。可以从官网下载安装包进行安装，或者使用包管理器进行安装。  
@@ -299,7 +297,7 @@ go get -u github.com/go-sql-driver/mysql
 
 ---
 
-### 二、连接MySQL  
+## 二、连接MySQL  
 
 在 Go 中，使用 database/sql 包来管理数据库连接。以下是一个简单的示例，展示如何建立连接：
 
@@ -323,7 +321,7 @@ if err != nil {
 }
 ```
 ---
-### 三、增删改查
+## 三、增删改查
 
 一旦连接建立，就可以执行 SQL了： 
 
@@ -362,7 +360,7 @@ res, err := db.Exec("DELETE FROM users WHERE name=?", "Alice")
 rowsAffected, _ := res.RowsAffected()
 ```
 ---
-### 四、事务处理
+## 四、事务处理
 
 在处理涉及多个数据库操作的业务逻辑时，事务是保证数据一致性的关键。以下是一个简单的事务处理示例：  
 
@@ -384,7 +382,7 @@ if err != nil {
 }
 ```
 ---
-### 五、连接池的使用
+## 五、连接池的使用
 
 5.1 连接池的重要性：  
 在高并发的场景下，建立和关闭数据库连接的开销是非常大的。使用连接池可以复用数据库连接，提高性能。  
@@ -401,7 +399,7 @@ db.SetConnMaxIdleTime(30*time.Minute) // 连接最大空闲时间
 ## GORM的使用   
 作为 Go 语言中最受欢迎的对象关系映射（ORM）库，GORM 提供了一套简洁且功能强大的 API，极大地简化了数据库操作。  
 
-### 一、GORM 简介
+## 一、GORM 简介
 GORM 是用 Go 语言编写的 ORM 库，它基于 httprouter 和 Go 标准库构建。其主要特点包括：  
 - 简洁易用：通过定义结构体来映射数据库表，简化数据操作；
 - 功能全面：支持 CRUD、事务、预加载、关联关系、自动迁移等常见功能；
@@ -411,7 +409,7 @@ GORM 是用 Go 语言编写的 ORM 库，它基于 httprouter 和 Go 标准库�
 参考:[GORM官方文档](https://gorm.io/zh_CN/docs/index.html)  
 
 ---
-### 二、环境搭建与安装
+## 二、环境搭建与安装
 在使用 GORM 之前，首先需要安装 Go 环境，然后通过 ```go get``` 命令安装 GORM 及所需数据库驱动。例如，如果你使用 MySQL 数据库，在终端运行以下命令安装：
 ```bash
 # 安装 GORM 框架
@@ -431,7 +429,7 @@ import (
 )
 ```
 ---
-### 三、连接数据库
+## 三、连接数据库
 
 GORM 通过 ```gorm.Open()``` 来创建数据库连接。我们需要提供 DSN（Data Source Name） 告诉 GORM 如何连接 MySQL。
 ```go
@@ -461,7 +459,7 @@ func main() {
 ```
 ---
 
-### 四、模型定义（Model） 
+## 四、模型定义（Model） 
 在 GORM 中，模型就是一个 Go 结构体，每个字段对应数据库表的一列。
 ```go
 type User struct {
@@ -478,7 +476,7 @@ type User struct {
 - UpdatedAt：更新时间
 - DeletedAt：删除时间（用于软删除）
 ---
-### 五、数据库迁移（Auto Migration）  
+## 五、数据库迁移（Auto Migration）  
 GORM 提供 ```AutoMigrate()``` 方法，可以根据模型自动创建或更新数据库表结构。  
 ```go
 // 自动迁移
@@ -488,7 +486,7 @@ db.AutoMigrate(&User{})
 - 只会新增字段和索引，不会删除已有字段或索引
 - 非常适合在开发阶段快速同步表结构
 ---
-### 六、CRUD 操作   
+## 六、CRUD 操作   
 6.1 创建（Create）
 使用 ```db.Create() ```插入一条记录到数据库。
 ```go
@@ -542,7 +540,7 @@ db.Delete(&User{}, 1)
 db.Unscoped().Delete(&User{}, 1)
 ```
 ---
-### 七、事务处理
+## 七、事务处理
 GORM 支持数据库事务，可以保证一系列操作的原子性。  
 ```go
 tx := db.Begin()
@@ -563,7 +561,7 @@ if err := tx.Create(&User{Name: "Charlie", Age: 30}).Error; err != nil {
 tx.Commit()
 ```
 ---
-### 八、关联关系
+## 八、关联关系
 GORM 支持常见的关联关系：
 - Has One（一对一）
 - Has Many（一对多）
@@ -597,7 +595,7 @@ var user User
 db.Preload("Posts").First(&user, 1)
 ```
 ---
-### 九、钩子函数（Hooks）  
+## 九、钩子函数（Hooks）  
 Hooks 是在创建、更新、删除等操作前后自动调用的函数，方便你在数据变更时做额外逻辑（如数据校验、密码加密）。
 ```go
 func (u *User) BeforeCreate(tx *gorm.DB) error {
@@ -611,7 +609,7 @@ func (u *User) AfterCreate(tx *gorm.DB) error {
 }
 ```
 ---
-### 十、常见问题与最佳实践
+## 十、常见问题与最佳实践
 10.1 字段标签（Tags）  
 ```go
 type User struct {
@@ -635,7 +633,7 @@ type User struct {
 10.5 批量操作  
 - 尽可能使用批量插入和更新，减少数据库连接次数；
 
-### 十一、实战案例
+## 十一、实战案例
 下面是一个简单的示例，展示如何使用 GORM 完成一个用户的 CRUD 操作，并处理一对多关联关系：
 ```go
 package main
@@ -706,9 +704,9 @@ func main() {
 
 ---
 
-# 👷 web框架
-## Gin框架
-### 一、Gin 框架简介  
+## 🔨 web框架
+# Gin框架
+## 一、Gin 框架简介  
 Gin 是一个用 Go (Golang) 编写的高性能 HTTP Web 框架。它基于 Radix Tree 路由算法，性能接近原生 net/http，同时提供了简洁易用的 API 和灵活的中间件机制。
 Gin 非常适合：
 - 构建高性能的 RESTful API
@@ -716,15 +714,15 @@ Gin 非常适合：
 - 快速开发 Web 应用
 - 需要高度扩展性的项目
 
-为什么选择 Gin？
-⚡ 高性能：基于 Radix Tree 路由，处理请求速度极快
-📦 轻量级：核心代码简洁，依赖少
-🔌 中间件支持：灵活的中间件机制，易于扩展
-📝 JSON 自动绑定：方便处理请求数据和返回响应
-🌐 丰富的生态：大量官方和社区开发的插件
-📚 详细文档：完善的中文和英文文档
+### 为什么选择 Gin？
+⚡ **高性能**：基于 Radix Tree 路由，处理请求速度极快  
+📦 **轻量级**：核心代码简洁，依赖少  
+🔌 **中间件支持**：灵活的中间件机制，易于扩展  
+📝 **JSON 自动绑定**：方便处理请求数据和返回响应  
+🌐 **丰富的生态**：大量官方和社区开发的插件  
+📚 **详细文档**：完善的中文和英文文档
 
-### 二、安装Gin
+## 二、安装Gin
 2.1 首先需要安装Go（需要1.10+版本），然后可以使用下面的Go命令安装Gin。
 ```bash
 go get -u github.com/gin-gonic/gin
@@ -761,8 +759,8 @@ go run main.go
 curl http://localhost:8080/ping
 ```
 ---
-### 三、核心功能
-#### 3.1 路由  
+## 三、核心功能
+### 3.1 路由  
 Gin 支持多种路由类型：
 ```go
 // 基本路由
@@ -782,7 +780,7 @@ r.GET("/assets/*filepath", func(c *gin.Context) {
 ```
 ✅ 场景：适用于构建 RESTful API、版本化 API（如 /v1/user）、静态资源服务等。  
 <br>
-#### 3.2 路由分组（routes group）  
+### 3.2 路由分组（routes group）  
 通过 `Group` 可以将一组路由归类，方便管理中间件和路径前缀：
 ```go
 // API 版本 1
@@ -797,7 +795,7 @@ v2.POST("/upload", uploadHandler)
 ```
 ✅ 场景：多版本 API 管理、后台与前台路由分离、权限控制分组等。  
 <br>
-#### 3.3 参数绑定与校验  
+### 3.3 参数绑定与校验  
 Gin 支持自动将请求数据（JSON、表单、Query 参数等）绑定到结构体，并支持数据校验：
 ```go
 type LoginRequest struct {
@@ -816,7 +814,7 @@ r.POST("/login", func(c *gin.Context) {
 ```
 ✅ 场景：API 输入验证、减少重复解析代码、提高开发效率。  
 <br>
-#### 3.4 中间件机制  
+### 3.4 中间件机制  
 Gin 的中间件机制非常灵活，可以在请求处理的不同阶段插入自定义逻辑：
 ```go
 // 自定义日志中间件
@@ -839,7 +837,7 @@ r.Use(Logger())
 
 ✅ 场景：日志记录、权限验证、跨域处理、限流、请求耗时统计等。  
 <br>
-#### 3.5 响应渲染  
+### 3.5 响应渲染  
 Gin 支持多种响应格式，让你轻松返回 JSON、XML、HTML 等数据：
 ```go
 // JSON 响应
@@ -856,7 +854,7 @@ c.HTML(200, "index.tmpl", gin.H{
 ```
 ✅ 场景：API 数据返回、网页渲染、前后端分离项目。  
 <br>
-#### 3.6 静态文件服务  
+### 3.6 静态文件服务  
 轻松提供静态文件访问：
 ```go
 // 提供整个目录
@@ -867,7 +865,7 @@ r.StaticFile("/favicon.ico", "./resources/favicon.ico")
 ```
 ✅ 场景：网站图片、CSS、JavaScript 文件、下载文件等。  
 <br>
-#### 3.7 文件上传  
+### 3.7 文件上传  
 支持单文件和多文件上传：
 ```go
 // 单文件上传
@@ -879,7 +877,7 @@ r.POST("/upload", func(c *gin.Context) {
 ```
 ✅ 场景：用户头像上传、附件上传、批量文件上传。  
 <br>
-#### 3.8 异步任务  
+### 3.8 异步任务  
 支持在请求处理中启动异步任务，避免阻塞响应：
 ```go
 r.GET("/long_async", func(c *gin.Context) {
@@ -894,10 +892,541 @@ r.GET("/long_async", func(c *gin.Context) {
 ```
 ✅ 场景：发送邮件、生成报表、日志处理等耗时操作。  
 <br>
-#### 💡 总结  
+### 💡 总结  
 Gin 的核心功能覆盖了 Web 开发的大部分需求，尤其是 **路由系统、中间件机制、参数绑定** 这三大特性，让开发者可以快速构建高性能、可扩展的 Web 应用。无论是轻量级 API 还是复杂的微服务，Gin 都能提供简洁而强大的工具支持。
 
+参考资料：http://www.topgoer.cn/docs/ginkuangjia/ginkuangjia-1c50hfaag99k2
+
 ---
+# Beego框架
+## 一、Beego框架简介
+Beego 是 Go 语言生态中一款 全功能 Web 框架，遵循 "开箱即用" 设计理念，内置 ORM、日志、会话、缓存等核心组件，无需大量第三方依赖即可快速构建完整 Web 应用。无论是传统 MVC 项目、RESTful API 还是微服务，Beego 都能提供简洁高效的解决方案。  
+
+GitHub 地址：https://github.com/beego/beego  
+官方文档：https://beego.vip/docs/  
+
+### 为什么选择 Beego？
+📦 **全栈集成**：内置 ORM（数据库交互）、Session（会话管理）、Cache（缓存）、Log（日志）等组件，无需额外选型    
+🔧 **开发工具链**：自带 bee 命令行工具，支持代码生成、热重载、项目打包，大幅提升开发效率  
+📐 **MVC 架构**：严格遵循 Model-View-Controller 设计模式，项目结构清晰，便于维护  
+🌐 **多场景支持**：既支持传统 HTML 渲染的 Web 应用，也支持 RESTful API 和微服务  
+👷 **内置安全特性**：自动防御 XSS、CSRF、SQL 注入等常见安全问题，降低安全开发成本  
+📊 **性能监控**：内置监控面板，可实时查看请求 QPS、响应时间、内存占用等指标  
+
+## 二、安装Beego
+### 2.1 环境准备
+首先安装 Beego 框架和官方命令行工具 bee：
+```bash
+# 安装 Beego 核心库
+go get github.com/beego/beego/v2@latest
+
+# 安装 bee 命令行工具（用于项目创建、热重载等）
+go install github.com/beego/bee/v2@latest
+```
+
+验证安装：
+```bash
+# 查看 bee 版本，确认安装成功
+bee version
+```
+### 2.2 创建第一个 Beego 项目
+使用 bee 工具快速生成项目骨架：
+```bash
+# 创建名为 "mybeegoapp" 的项目
+bee new mybeegoapp
+
+# 进入项目目录
+cd mybeegoapp
+
+# 启动项目（默认热重载，代码修改后自动重启）
+bee run
+```
+
+访问 `http://localhost:8080`，即可看到 Beego 默认欢迎页，说明项目启动成功！  
+
+### 2.3 项目目录结构
+`bee new` 生成的项目遵循标准 MVC 结构，清晰易懂：  
+```plaintext
+mybeegoapp/
+├── conf/          # 配置文件目录
+│   └── app.conf   # 项目核心配置（端口、环境、数据库等）
+├── controllers/   # 控制器目录（处理请求逻辑）
+│   └── default.go # 默认控制器
+├── models/        # 模型目录（数据库交互、业务逻辑）
+├── routers/       # 路由配置目录（映射 URL 到控制器）
+│   └── router.go  # 路由规则定义
+├── static/        # 静态资源目录（CSS、JS、图片等）
+│   ├── css/
+│   ├── img/
+│   └── js/
+├── views/         # 视图目录（HTML 模板）
+│   └── index.tpl  # 默认首页模板
+├── main.go        # 项目入口文件
+└── go.mod         # Go Modules 依赖配置
+```
+
+## 三、核心功能
+### 3.1 路由配置：URL 映射到控制器
+路由是请求的入口，Beego 支持多种路由规则，配置文件在 routers/router.go 中。
+基本路由（GET/POST 等）
+```go
+package routers
+
+import (
+    "mybeegoapp/controllers"
+    "github.com/beego/beego/v2/server/web"
+)
+
+func init() {
+    // 1. 基本路由：GET 请求，URL "/hello" 映射到 DefaultController 的 Hello 方法
+    web.Router("/hello", &controllers.DefaultController{}, "get:Hello")
+
+    // 2. 多方法路由：同一 URL 支持 GET/POST，分别映射到不同方法
+    web.Router("/submit", &controllers.DefaultController{}, "get:ShowForm;post:HandleSubmit")
+
+    // 3. 带参数的路由：URL 中的 ":id" 作为参数传递给控制器
+    web.Router("/user/:id", &controllers.UserController{}, "get:GetUser")
+}
+```
+### 3.2 控制器：处理请求逻辑
+控制器负责接收请求、处理业务逻辑、返回响应，代码放在 controllers/ 目录下。
+示例：实现一个用户控制器
+```go
+// controllers/user.go
+package controllers
+
+import (
+    "github.com/beego/beego/v2/server/web"
+    "github.com/beego/beego/v2/server/web/context"
+)
+
+// UserController 定义用户相关控制器
+type UserController struct {
+    web.Controller // 嵌入 Beego 基础控制器，继承核心方法
+}
+
+// GetUser 处理 "/user/:id" 的 GET 请求
+func (c *UserController) GetUser() {
+    // 1. 获取 URL 参数（从路由 ":id" 中获取）
+    userId := c.Ctx.Input.Param(":id")
+
+    // 2. 模拟业务逻辑（如从数据库查询用户）
+    userName := "Alice" // 实际项目中应从 models 层获取数据
+
+    // 3. 返回响应：支持 HTML 模板渲染或 JSON 输出
+    // 方式1：渲染 HTML 模板（模板文件在 views/user.tpl）
+    c.Data["UserId"] = userId
+    c.Data["UserName"] = userName
+    c.TplName = "user.tpl" // 指定模板文件
+
+    // 方式2：返回 JSON（适合 API 场景）
+    // c.Data["json"] = map[string]interface{}{
+    //     "code": 200,
+    //     "data": map[string]string{
+    //         "id":   userId,
+    //         "name": userName,
+    //     },
+    // }
+    // c.ServeJSON() // 自动设置 Content-Type 为 application/json
+}
+
+// 中间件：在控制器方法执行前拦截请求（如权限校验）
+func (c *UserController) Prepare() {
+    // 示例：验证用户是否登录（未登录则重定向到登录页）
+    isLogin := c.GetSession("isLogin") // 从 Session 获取登录状态
+    if isLogin == nil || isLogin.(bool) == false {
+        c.Ctx.Redirect(302, "/login") // 重定向到登录页
+    }
+}
+```
+### 3.3 模型（ORM）：数据库交互  
+Beego 内置强大的 ORM 组件，支持 MySQL、PostgreSQL、SQLite 等主流数据库，无需手写 SQL 即可完成数据操作。  
+
+**步骤 1**：配置数据库（conf/app.conf）
+```ini
+# conf/app.conf
+appname = mybeegoapp
+httpport = 8080
+runmode = dev # 开发环境（dev）/ 生产环境（prod）
+
+# 数据库配置（MySQL 示例）
+db.driver = mysql
+db.user = root
+db.password = your_password
+db.host = 127.0.0.1
+db.port = 3306
+db.name = mybeego_db
+```
+
+**步骤 2**：初始化 ORM（models/init.go）
+```go
+// models/init.go
+package models
+
+import (
+    "github.com/beego/beego/v2/client/orm"
+    _ "github.com/go-sql-driver/mysql" // 导入 MySQL 驱动（_ 表示只执行 init 函数）
+    "github.com/beego/beego/v2/server/web"
+)
+
+func init() {
+    // 1. 读取配置文件中的数据库信息
+    driver, _ := web.AppConfig.String("db.driver")
+    user, _ := web.AppConfig.String("db.user")
+    password, _ := web.AppConfig.String("db.password")
+    host, _ := web.AppConfig.String("db.host")
+    port, _ := web.AppConfig.String("db.port")
+    dbName, _ := web.AppConfig.String("db.name")
+
+    // 2. 拼接数据库连接字符串
+    connStr := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?charset=utf8mb4"
+
+    // 3. 注册数据库驱动和连接
+    orm.RegisterDriver(driver, orm.DRMySQL)
+    orm.RegisterDataBase("default", driver, connStr)
+
+    // 4. 自动创建表（开发环境使用，生产环境建议手动执行 SQL）
+    orm.RunSyncdb("default", false, true)
+}
+```
+
+**步骤 3**：定义模型并操作数据库
+```go
+// models/user.go
+package models
+
+import (
+    "github.com/beego/beego/v2/client/orm"
+    "time"
+)
+
+// User 定义用户模型（对应数据库中的 user 表）
+type User struct {
+    Id        int       `orm:"auto;pk"` // 自增主键
+    Username  string    `orm:"size(50);unique"` // 用户名（唯一，长度 50）
+    Password  string    `orm:"size(100)"` // 密码（建议存储哈希值）
+    Email     string    `orm:"size(100);unique"` // 邮箱（唯一）
+    CreatedAt time.Time `orm:"auto_now_add"` // 创建时间（自动填充当前时间）
+    UpdatedAt time.Time `orm:"auto_now"` // 更新时间（自动更新为当前时间）
+}
+
+// 注册模型（让 ORM 识别）
+func init() {
+    orm.RegisterModel(new(User))
+}
+
+// AddUser 新增用户
+func AddUser(username, password, email string) (int64, error) {
+    o := orm.NewOrm()
+    user := User{
+        Username: username,
+        Password: password, // 实际项目中应使用 bcrypt 等算法加密密码
+        Email:    email,
+    }
+    // 插入数据，返回主键 ID 和错误
+    return o.Insert(&user)
+}
+
+// GetUserByUsername 根据用户名查询用户
+func GetUserByUsername(username string) (*User, error) {
+    o := orm.NewOrm()
+    user := &User{}
+    // 根据 Username 字段查询（使用 Filter 条件）
+    err := o.QueryTable("user").Filter("Username", username).One(user)
+    return user, err
+}
+```
+
+### 3.4 视图模板：HTML 渲染
+Beego 支持基于 Go 原生模板语法的视图渲染，模板文件放在 `views/` 目录下，支持模板继承、变量渲染、循环判断等功能。
+示例 1：基础模板（views/base.tpl）
+```html
+<!-- views/base.tpl：基础模板，供其他页面继承 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}} - MyBeegoApp</title>
+    <!-- 引入静态资源（CSS/JS） -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <a href="/">首页</a>
+        <a href="/user/{{.CurrentUser.Id}}">我的主页</a>
+        <a href="/logout">退出登录</a>
+    </nav>
+
+    <!-- 内容区域（子模板填充） -->
+    {{block "content" .}}{{end}}
+
+    <!-- 页脚 -->
+    <footer>
+        © 2024 MyBeegoApp - Powered by Beego
+    </footer>
+</body>
+</html>
+```
+
+示例 2：子模板（views/user.tpl）
+```html
+<!-- views/user.tpl：继承 base.tpl，填充 content 区域 -->
+{{extend "base.tpl"}}
+
+{{block "content" .}}
+<div class="user-info">
+    <h1>用户信息</h1>
+    <p>用户 ID：{{.UserId}}</p>
+    <p>用户名：{{.UserName}}</p>
+    <p>注册时间：{{.User.CreatedAt.Format "2006-01-02 15:04:05"}}</p>
+</div>
+{{end}}
+```
+### 3.5 会话管理（Session）
+Beego 内置 Session 组件，支持内存、文件、Redis 等多种存储方式，用于保存用户登录状态、临时数据等。  
+
+**配置 Session（conf/app.conf）**
+```ini
+# Session 配置
+sessionon = true # 开启 Session
+sessionprovider = file # 存储方式：file（文件）/ redis（Redis）/ memory（内存，开发用）
+sessionproviderconfig = ./tmp/sessions # 文件存储路径（需手动创建 tmp/sessions 目录）
+sessiongcmaxlifetime = 3600 # Session 有效期（秒）
+```
+**在控制器中使用 Session**
+```go
+// 登录成功后设置 Session
+func (c *LoginController) HandleLogin() {
+    username := c.GetString("username")
+    password := c.GetString("password")
+
+    // 验证用户名密码（实际项目中应调用 models 层方法）
+    if username == "admin" && password == "123456" {
+        // 设置 Session：标记用户已登录
+        c.SetSession("isLogin", true)
+        c.SetSession("username", username)
+        // 重定向到首页
+        c.Redirect(302, "/")
+    } else {
+        // 登录失败，返回错误信息
+        c.Data["error"] = "用户名或密码错误"
+        c.TplName = "login.tpl"
+    }
+}
+
+// 退出登录：删除 Session
+func (c *LoginController) Logout() {
+    // 删除指定 Session
+    c.DelSession("isLogin")
+    c.DelSession("username")
+    // 或清空所有 Session
+    // c.DestroySession()
+    // 重定向到登录页
+    c.Redirect(302, "/login")
+}
+```
+### 3.6 缓存（Cache）
+Beego 内置缓存组件，支持内存、Redis、Memcached 等存储方式，用于减轻数据库压力，提升高频访问接口的响应速度。
+示例：使用缓存存储热门数据
+```go
+
+package controllers
+
+import (
+    "github.com/beego/beego/v2/client/cache"
+    "github.com/beego/beego/v2/server/web"
+    "time"
+    _ "github.com/beego/beego/v2/client/cache/redis" // 导入 Redis 缓存驱动
+)
+
+type HotController struct {
+    web.Controller
+}
+
+func (c *HotController) GetHotArticles() {
+    // 1. 初始化缓存（Redis 示例）
+    cacheConfig := `{"key":"mybeego_cache","conn":"127.0.0.1:6379","dbNum":"0","password":""}`
+    cacheObj, err := cache.NewCache("redis", cacheConfig)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 500, "msg": "缓存初始化失败"}
+        c.ServeJSON()
+        return
+    }
+
+    // 2. 尝试从缓存获取数据
+    cacheKey := "hot_articles"
+    var hotArticles []map[string]interface{}
+    if err := cacheObj.Get(cacheKey, &hotArticles); err == nil {
+        // 缓存命中，直接返回数据
+        c.Data["json"] = map[string]interface{}{"code": 200, "data": hotArticles}
+        c.ServeJSON()
+        return
+    }
+
+    // 3. 缓存未命中，从数据库查询数据（模拟）
+    hotArticles = []map[string]interface{}{
+        {"id": 1, "title": "Beego 入门教程"},
+        {"id": 2, "title": "Golang 并发编程"},
+    }
+
+    // 4. 将数据存入缓存（设置有效期 10 分钟）
+    cacheObj.Put(cacheKey, hotArticles, 10*time.Minute)
+
+    // 5. 返回数据
+    c.Data["json"] = map[string]interface{}{"code": 200, "data": hotArticles}
+    c.ServeJSON()
+}
+```
+## 四、进阶实战：构建 RESTful API
+
+Beego 非常适合构建 RESTful API，通过路由映射和 JSON 响应，可以快速实现规范的 API 服务。
+
+### 4.1 定义 API 路由（routers/router.go）
+```go
+package routers
+
+import (
+    "mybeegoapp/controllers"
+    "github.com/beego/beego/v2/server/web"
+)
+
+func init() {
+    // API 路由分组（前缀 /api/v1）
+    api := web.NewNamespace("/api/v1",
+        // 用户相关 API
+        web.NSNamespace("/users",
+            web.Router("", &controllers.UserAPIController{}, "get:List;post:Create"), // GET /api/v1/users（列表）、POST（创建）
+            web.Router("/:id", &controllers.UserAPIController{}, "get:Get;put:Update;delete:Delete"), // GET（详情）、PUT（更新）、DELETE（删除）
+        ),
+
+        // 文章相关 API
+        web.NSNamespace("/articles",
+            web.Router("", &controllers.ArticleAPIController{}, "get:List;post:Create"), // GET /api/v1/articles（列表）、POST（创建）
+            web.Router("/:id", &controllers.ArticleAPIController{}, "get:Get;put:Update;delete:Delete"), // GET（详情）、PUT（更新）、DELETE（删除）
+        ),
+    )
+
+    // 注册路由组
+    web.AddNamespace(api)
+}
+```
+### 4.2 控制器实现（controllers/user_api.go 示例）
+```go
+package controllers
+
+import (
+    "mybeegoapp/models"
+    "github.com/beego/beego/v2/server/web"
+)
+
+// UserAPIController 处理用户相关 API 请求
+type UserAPIController struct {
+    web.Controller
+}
+
+// @Title List
+// @Description 获取用户列表
+// @Success 200 {array} models.User
+// @router / [get]
+func (c *UserAPIController) List() {
+    users, err := models.GetAllUsers()
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 500, "msg": err.Error()}
+    } else {
+        c.Data["json"] = map[string]interface{}{"code": 200, "data": users}
+    }
+    c.ServeJSON()
+}
+
+// @Title Create
+// @Description 创建用户
+// @Param   body        body    models.User true        "用户信息"
+// @Success 201 {string} 成功创建
+// @router / [post]
+func (c *UserAPIController) Create() {
+    var user models.User
+    if err := c.ParseForm(&user); err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 400, "msg": "参数错误"}
+        c.ServeJSON()
+        return
+    }
+    _, err := models.AddUser(user.Username, user.Password, user.Email)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 500, "msg": err.Error()}
+    } else {
+        c.Data["json"] = map[string]interface{}{"code": 201, "msg": "创建成功"}
+    }
+    c.ServeJSON()
+}
+
+// @Title Get
+// @Description 根据 ID 获取用户信息
+// @Param   id      path    string true        "用户ID"
+// @Success 200 {object} models.User
+// @router /:id [get]
+func (c *UserAPIController) Get() {
+    id := c.Ctx.Input.Param(":id")
+    user, err := models.GetUserById(id)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 404, "msg": "用户不存在"}
+    } else {
+        c.Data["json"] = map[string]interface{}{"code": 200, "data": user}
+    }
+    c.ServeJSON()
+}
+
+// @Title Update
+// @Description 更新用户信息
+// @Param   id      path    string true        "用户ID"
+// @Param   body    body    models.User true        "用户信息"
+// @Success 200 {string} 更新成功
+// @router /:id [put]
+func (c *UserAPIController) Update() {
+    id := c.Ctx.Input.Param(":id")
+    var user models.User
+    if err := c.ParseForm(&user); err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 400, "msg": "参数错误"}
+        c.ServeJSON()
+        return
+    }
+    err := models.UpdateUser(id, &user)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 500, "msg": err.Error()}
+    } else {
+        c.Data["json"] = map[string]interface{}{"code": 200, "msg": "更新成功"}
+    }
+    c.ServeJSON()
+}
+
+// @Title Delete
+// @Description 删除用户
+// @Param   id      path    string true        "用户ID"
+// @Success 200 {string} 删除成功
+// @router /:id [delete]
+func (c *UserAPIController) Delete() {
+    id := c.Ctx.Input.Param(":id")
+    err := models.DeleteUser(id)
+    if err != nil {
+        c.Data["json"] = map[string]interface{}{"code": 500, "msg": err.Error()}
+    } else {
+        c.Data["json"] = map[string]interface{}{"code": 200, "msg": "删除成功"}
+    }
+    c.ServeJSON()
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
 ##  💻 项目实战
 
 
